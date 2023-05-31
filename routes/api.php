@@ -11,6 +11,8 @@ use App\Http\Controllers\TransitController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+Route::get('status', fn() => 'ok');
+
 Route::get('hours', HoursController::class);
 
 Route::get('news/{source}', NewsController::class)->whereIn('source', array_column(NewsSource::cases(), 'value'));
