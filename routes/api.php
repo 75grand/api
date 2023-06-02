@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MobileAuthController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\CalendarImageController;
 use App\Http\Controllers\HoursController;
@@ -8,8 +9,11 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NewsSource;
 use App\Http\Controllers\TransitController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+Route::get('authentication', [MobileAuthController::class, 'redirect']);
 
 Route::get('status', fn() => 'ok');
 
@@ -27,6 +31,6 @@ Route::get('map', [MapController::class, 'index']);
 Route::get('menu/{date}', [MenuController::class, 'index'])->where('date', '\d{4}-\d{2}-\d{2}');
 Route::get('menu/item/{id}', [MenuController::class, 'show'])->whereNumber('id');
 
-Route::middleware('auth:sanctum')->get('user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function() {
+    Route::get('user', [UserController::class, 'show']);
 });

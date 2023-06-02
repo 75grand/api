@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('avatar');
 
+            $table->string('expo_token')->nullable();
+            $table->string('macpass_number')->nullable();
+
             $table->timestamps();
         });
     }
