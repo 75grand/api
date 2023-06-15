@@ -21,7 +21,6 @@ class MobileAuthController extends Controller
                 ->stateless()
                 ->with([
                     'hd' => 'macalester.edu',
-                    'prompt' => 'select_account',
                     'state' => json_encode([
                         'device' => request('device'),
                         'callback_url' => request('callback_url')
