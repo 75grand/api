@@ -17,7 +17,10 @@ return new class extends Migration
 
             $table->string('title');
             $table->text('description')->nullable();
+
             $table->string('location')->nullable();
+            $table->double('latitude')->nullable();
+            $table->double('longitude')->nullable();
 
             $table->dateTime('start_date');
             $table->dateTime('end_date');
@@ -25,7 +28,7 @@ return new class extends Migration
             $table->string('calendar_name');
             $table->string('url')->nullable();
 
-            $table->boolean('checked_for_image')->default(false);
+            $table->boolean('checked_for_data')->default(false);
             $table->string('image_url')->nullable();
         });
     }
