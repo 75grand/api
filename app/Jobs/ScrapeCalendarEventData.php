@@ -52,7 +52,7 @@ class ScrapeCalendarEventData implements ShouldQueue
             $this->event->longitude = $location->getAttribute('data-lon');
         }
 
-        $this->event->checked_for_image = true;
+        $this->event->checked_for_data = true;
         $this->event->save();
     }
 }

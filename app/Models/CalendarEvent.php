@@ -14,7 +14,7 @@ class CalendarEvent extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'checked_for_image' => 'boolean',
+        'checked_for_data' => 'boolean',
         'start_date' => 'datetime',
         'end_date' => 'datetime'
     ];

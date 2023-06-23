@@ -48,7 +48,7 @@ class RefreshCalendar implements ShouldQueue
             ]);
 
             $mightHaveImage =
-                !$savedEvent->checked_for_image &&
+                !$savedEvent->checked_for_data &&
                 $savedEvent->url &&
                 str_starts_with($savedEvent->url, 'https://www.macalester.edu/calendar/event/');
 
