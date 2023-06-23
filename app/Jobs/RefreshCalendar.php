@@ -47,12 +47,12 @@ class RefreshCalendar implements ShouldQueue
                 'url' => $this->clean($event->url)
             ]);
 
-            $mightHaveImage =
+            $mightHaveData =
                 !$savedEvent->checked_for_data &&
                 $savedEvent->url &&
                 str_starts_with($savedEvent->url, 'https://www.macalester.edu/calendar/event/');
 
-            ScrapeCalendarEventData::dispatchIf($mightHaveImage, $savedEvent);
+            ScrapeCalendarEventData::dispatchIf($mightHaveData, $savedEvent);
         }
     }
 
