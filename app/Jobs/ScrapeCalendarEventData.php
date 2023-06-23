@@ -10,10 +10,9 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use voku\helper\HtmlDomParser;
 
-class ScrapeCalendarEventImage implements ShouldQueue
+class ScrapeCalendarEventData implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -43,10 +42,14 @@ class ScrapeCalendarEventImage implements ShouldQueue
     public function handle(): void
     {
         $dom = HtmlDomParser::file_get_html($this->event->url);
-        $image = $dom->findOneOrFalse('.context-image__image');
 
-        if($image) {
+        if($image = $dom->findOneOrFalse('.context-image__image')) {
             $this->event->image_url = $image->getAttribute('src');
+        }
+
+        if($location = $dom->findOneOrFalse('#location-box')) {
+            $this->event->latitude = $location->getAttribute('data-lat');
+            $this->event->longitude = $location->getAttribute('data-lon');
         }
 
         $this->event->checked_for_image = true;

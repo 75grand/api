@@ -11,7 +11,8 @@ class CalendarEventController extends Controller
     {
         return CalendarEvent::select([
                 'id',
-                'title', 'location', 'description',
+                'title', 'description',
+                'location', 'latitude', 'longitude',
                 'start_date', 'end_date',
                 'calendar_name', 'image_url', 'url'
             ])
@@ -24,7 +25,8 @@ class CalendarEventController extends Controller
     {
         return $event->only([
             'id',
-            'title', 'location', 'description',
+            'title', 'description',
+            'location', 'latitude', 'longitude',
             'start_date', 'end_date',
             'calendar_name', 'image_url', 'url'
         ]);
