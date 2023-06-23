@@ -52,6 +52,10 @@ class ScrapeCalendarEventData implements ShouldQueue
             $this->event->longitude = $location->getAttribute('data-lon');
         }
 
+        if($link = $dom->findOneOrFalse('.events-single-details__right .base-cta-featured')) {
+            $this->event->url = $link->getAttribute('href');
+        }
+
         $this->event->checked_for_data = true;
         $this->event->save();
     }
