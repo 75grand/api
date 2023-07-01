@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Jobs\RefreshCalendars;
+use App\Jobs\RefreshCourseData;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -17,6 +18,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->job(new RefreshCalendars)->hourly();
+        $schedule->job(new RefreshCourseData)->dailyAt('4:00');
     }
 
     /**
