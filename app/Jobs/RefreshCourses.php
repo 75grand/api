@@ -36,7 +36,7 @@ class RefreshCourses implements ShouldQueue
     {
         $courses = $this->loadCourseData();
 
-        foreach($courses as &$course) {
+        foreach($courses as $course) {
             $building = $course['meetingsFaculty'][0]['meetingTime']['building'];
             $room = $course['meetingsFaculty'][0]['meetingTime']['room'];
             $location = $building && $room ? "$building $room" : null;
@@ -87,28 +87,15 @@ class RefreshCourses implements ShouldQueue
             foreach($this->getDistRequirements($course) as $requirement) {
                 $courseModel->distRequirements()->syncWithoutDetaching($requirement->id);
             }
-
-            $course['model'] = $courseModel;
         }
 
-        Log::info('scraping cross listings & labs');
         foreach($courses as $course) {
-            $courseModel = $course['model'];
-
             if($course['crossList'] !== null) {
                 $this->attachCrossListings(
                     $course['crossList'],
-                    $courseModel,
+                    Course::where('remote_id', $course['id'])->first(),
                     $courses
                 );
-            }
-
-            $isClass = $course['scheduleTypeDescription'] === 'Class';
-            $hasLabs = $course['isSectionLinked'];
-            $labsScraped = $courseModel->labs()->exists();
-
-            if($hasLabs && $isClass && !$labsScraped) {
-                ScrapeLabs::dispatch($courseModel);
             }
         }
     }
@@ -135,6 +122,11 @@ class RefreshCourses implements ShouldQueue
             $count = count($data['data']);
             Log::info("fetched $count courses");
 
+            file_put_contents(
+                "/Users/jerome/Downloads/scrapes/{$this->term->code}-{$offset}.json",
+                json_encode($data, JSON_PRETTY_PRINT)
+            );
+
             $totalCourses = $data['totalCount'];
             $courses = array_merge($courses, $data['data'] ?? []);
             $offset += $pageSize;
@@ -144,7 +136,7 @@ class RefreshCourses implements ShouldQueue
     }
 
     /**
-     * Parse and return the distribution requirements that this course fulfills
+     * Parse and return the distRequirements that this course fulfills
      * @return DistRequirement[]
      */
     private function getDistRequirements(array $course): array
@@ -155,7 +147,7 @@ class RefreshCourses implements ShouldQueue
             $distRequirements[] = DistRequirement::firstOrCreate([
                 'code' => $requirement['code']
             ], [
-                'name' => deep_clean_string($requirement['description'])
+                'name' => $requirement['description']
            ]);
         }
 

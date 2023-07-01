@@ -11,8 +11,6 @@ class DistRequirement extends Model
 
     protected $guarded = [];
 
-    protected $hidden = ['pivot'];
-
     public function courses()
     {
         return $this->belongsToMany(Course::class);

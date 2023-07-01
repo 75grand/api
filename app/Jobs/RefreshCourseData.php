@@ -24,14 +24,14 @@ class RefreshCourseData implements ShouldQueue
         Log::info('refreshing terms');
         RefreshTerms::dispatchSync();
 
-        Log::info('refreshing courses');
         Term::where('name', 'like', 'Spring%')
             ->orWhere('name', 'like', 'Fall%')
             ->orderBy('code', 'desc')
-            ->limit(2)
+            ->limit(1) // 2*4
             ->get()->each(function($term) {
-                RefreshCourses::dispatchSync($term);
-                RefreshCourseDescriptions::dispatch($term);
+                Log::info('');
+                Log::info("refreshing courses for $term->name");
+                RefreshCourses::dispatch($term);
             });
 
         Log::info('scraping prerequisites');

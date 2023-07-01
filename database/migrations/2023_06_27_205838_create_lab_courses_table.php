@@ -12,10 +12,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cross_listings', function (Blueprint $table) {
-            $table->foreignIdFor(Course::class, 'course_a');//->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(Course::class, 'course_b');//->constrained()->cascadeOnDelete();
-            $table->unique(['course_a', 'course_b']);
+        Schema::create('lab_courses', function (Blueprint $table) {
+            $table->foreignIdFor(Course::class, 'main_course_id');//->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Course::class, 'lab_course_id');//->constrained()->cascadeOnDelete();
+            $table->unique(['main_course_id', 'lab_course_id']);
         });
     }
 
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cross_listings');
+        Schema::dropIfExists('lab_courses');
     }
 };
