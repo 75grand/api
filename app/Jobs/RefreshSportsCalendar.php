@@ -31,7 +31,7 @@ class RefreshSportsCalendar implements ShouldQueue
             CalendarEvent::updateOrCreate([
                 'remote_id' => $item->guid
             ], [
-                'title' => $this->clean(strstr($item->description, '\n', true)),
+                'title' => deep_clean_string(strstr($item->description, '\n', true)),
                 'location' => $ev->location ?? null,
                 'start_date' => Carbon::parse($ev->startdate),
                 'end_date' => Carbon::parse($ev->enddate),
@@ -39,13 +39,5 @@ class RefreshSportsCalendar implements ShouldQueue
                 'image_url' => $s->opponentlogo ?? null
             ]);
         }
-    }
-
-    private function clean(string $string): string
-    {
-        $string = html_entity_decode($string, ENT_QUOTES|ENT_HTML5, 'UTF-8');
-        $string = html_entity_decode($string, ENT_QUOTES|ENT_HTML5, 'UTF-8');
-        $string = trim($string);
-        return $string;
     }
 }

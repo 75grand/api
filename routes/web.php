@@ -1,8 +1,6 @@
 <?php
 
 use App\Http\Controllers\MobileAuthController;
-use App\Jobs\RefreshCalendars;
-use App\Jobs\RefreshSportsCalendar;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', 'https://github.com/75grand/api', 301);

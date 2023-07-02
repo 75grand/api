@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\MobileAuthController;
 use App\Http\Controllers\CalendarEventController;
+use App\Http\Controllers\CourseCatalogController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HoursController;
 use App\Http\Controllers\MapController;
@@ -14,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 
 // API Health Check
 Route::get('status', fn() => 'ok');
+
+// Course Catalog
+Route::get('courses/{term:code}', [CourseCatalogController::class, 'index']);
 
 // Feedback
 Route::post('feedback', FeedbackController::class);
