@@ -149,7 +149,7 @@ class RefreshCourses implements ShouldQueue
     }
 
     /**
-     * Parse and return the distRequirements that this course fulfills
+     * Parse and return the distribution requirements that this course fulfills
      * @return DistRequirement[]
      */
     private function getDistRequirements(array $course): array
@@ -160,7 +160,7 @@ class RefreshCourses implements ShouldQueue
             $distRequirements[] = DistRequirement::firstOrCreate([
                 'code' => $requirement['code']
             ], [
-                'name' => $requirement['description']
+                'name' => deep_clean_string($requirement['description'])
            ]);
         }
 

@@ -11,9 +11,12 @@ class Course extends Model
 
     protected $guarded = [];
 
+    protected $hidden = ['pivot'];
+
     protected $casts = [
         'prerequisites' => 'array',
-        'days' => 'array'
+        'days' => 'array',
+        'attendance_required' => 'boolean'
     ];
 
     public function distRequirements()
