@@ -135,11 +135,6 @@ class RefreshCourses implements ShouldQueue
             $count = count($data['data']);
             Log::info("fetched $count courses");
 
-            file_put_contents(
-                "/Users/jerome/Downloads/scrapes/{$this->term->code}-{$offset}.json",
-                json_encode($data, JSON_PRETTY_PRINT)
-            );
-
             $totalCourses = $data['totalCount'];
             $courses = array_merge($courses, $data['data'] ?? []);
             $offset += $pageSize;
