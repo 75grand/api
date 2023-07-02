@@ -29,7 +29,7 @@ if(!function_exists('title_case')) {
 }
 
 if(!function_exists('image_cdn_url')) {
-    function image_cdn_url(string $image_url, $width = 0, $height = 0, $quality = 80): string {
+    function image_cdn_url(string $image_url, $width = 0, $height = 0, $quality = 80, $trim = 0): string {
         if( // Short-circuit if URL is relative or local
             str_starts_with($image_url, '/') ||
             in_array(parse_url($image_url, PHP_URL_HOST), ['localhost', '127.0.0.1'])
@@ -40,7 +40,8 @@ if(!function_exists('image_cdn_url')) {
             'w' => $width,
             'h' => $height,
             'fit' => 'cover',
-            'q' => $quality
+            'q' => $quality,
+            'trim' => $trim
         ]);
     }
 }

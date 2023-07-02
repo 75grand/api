@@ -36,7 +36,7 @@ class RefreshSportsCalendar implements ShouldQueue
                 'start_date' => Carbon::parse($ev->startdate),
                 'end_date' => Carbon::parse($ev->enddate),
                 'calendar_name' => 'Sports',
-                'image_url' => $s->opponentlogo ?? null
+                'image_url' => image_cdn_url($s->opponentlogo, trim: 5) ?? null
             ]);
         }
     }
