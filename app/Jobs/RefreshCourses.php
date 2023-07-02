@@ -36,7 +36,7 @@ class RefreshCourses implements ShouldQueue
     {
         $courses = $this->loadCourseData();
 
-        foreach($courses as $course) {
+        foreach($courses as &$course) {
             $building = $course['meetingsFaculty'][0]['meetingTime']['building'];
             $room = $course['meetingsFaculty'][0]['meetingTime']['room'];
             $location = $building && $room ? "$building $room" : null;
@@ -88,18 +88,27 @@ class RefreshCourses implements ShouldQueue
                 $courseModel->distRequirements()->syncWithoutDetaching($requirement->id);
             }
 
-            if($course['isSectionLinked'] && $course['scheduleTypeDescription'] === 'Class') {
-                ScrapeLabs::dispatch($courseModel);
-            }
+            $course['model'] = $courseModel;
         }
 
+        Log::info('scraping cross listings & labs');
         foreach($courses as $course) {
+            $courseModel = $course['model'];
+
             if($course['crossList'] !== null) {
                 $this->attachCrossListings(
                     $course['crossList'],
-                    Course::where('remote_id', $course['id'])->first(),
+                    $courseModel,
                     $courses
                 );
+            }
+
+            $isClass = $course['scheduleTypeDescription'] === 'Class';
+            $hasLabs = $course['isSectionLinked'];
+            $labsScraped = $courseModel->labs()->exists();
+
+            if($hasLabs && $isClass && !$labsScraped) {
+                ScrapeLabs::dispatch($courseModel);
             }
         }
     }
