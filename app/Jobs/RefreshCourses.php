@@ -87,6 +87,10 @@ class RefreshCourses implements ShouldQueue
             foreach($this->getDistRequirements($course) as $requirement) {
                 $courseModel->distRequirements()->syncWithoutDetaching($requirement->id);
             }
+
+            if($course['isSectionLinked'] && $course['scheduleTypeDescription'] === 'Class') {
+                ScrapeLabs::dispatch($courseModel);
+            }
         }
 
         foreach($courses as $course) {
