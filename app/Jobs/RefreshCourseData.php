@@ -30,7 +30,7 @@ class RefreshCourseData implements ShouldQueue
             ->orderBy('code', 'desc')
             ->limit(2)
             ->get()->each(function($term) {
-                RefreshCourses::dispatch($term);
+                RefreshCourses::dispatchSync($term);
                 RefreshCourseDescriptions::dispatch($term);
             });
 
