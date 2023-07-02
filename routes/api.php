@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('status', fn() => 'ok');
 
 // Course Catalog
-Route::get('courses', [CourseCatalogController::class, 'index']);
+Route::get('courses/{term:code}', [CourseCatalogController::class, 'index']);
 
 // Feedback
 Route::post('feedback', FeedbackController::class);
