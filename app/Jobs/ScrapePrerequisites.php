@@ -27,21 +27,6 @@ class ScrapePrerequisites implements ShouldQueue
     ) {}
 
     /**
-     * Get the middleware the job should pass through.
-     *
-     * @return array<int, object>
-     */
-    public function middleware(): array
-    {
-        return [
-            // Scrape only one course at a time
-            (new WithoutOverlapping())
-                ->expireAfter(15) // 15 second timeout
-                ->releaseAfter(1) // 1 second between request
-        ];
-    }
-
-    /**
      * Execute the job.
      */
     public function handle(): void
