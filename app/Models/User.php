@@ -13,5 +13,10 @@ class User extends Authenticatable
 
     protected $guarded = [];
 
-    protected $hidden = ['expo_token'];
+    protected $hidden = ['expo_token', 'pivot'];
+
+    public function events()
+    {
+        return $this->belongsToMany(CalendarEvent::class);
+    }
 }
