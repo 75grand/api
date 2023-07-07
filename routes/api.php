@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\AttachEventAttendee;
 use App\Http\Controllers\MobileAuthController;
-use App\Http\Controllers\CalendarEventController;
 use App\Http\Controllers\CourseCatalogController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HoursController;
@@ -9,6 +9,9 @@ use App\Http\Controllers\MapController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NewsSource;
+use App\Http\Controllers\ListEventAttendees;
+use App\Http\Controllers\ListEvents;
+use App\Http\Controllers\ShowEvent;
 use App\Http\Controllers\TransitController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -29,7 +32,13 @@ Route::get('hours', HoursController::class);
 Route::get('news/{source}', NewsController::class)->whereIn('source', array_column(NewsSource::cases(), 'value'));
 
 // Calendar Events
-Route::apiResource('events', CalendarEventController::class)->only(['index', 'show']);
+Route::get('events', ListEvents::class);
+Route::get('events/{event}', ShowEvent::class);
+
+Route::middleware('auth:sanctum')->group(function() {
+    Route::get('events/{event}/attendees', ListEventAttendees::class);
+    Route::post('events/{event}/attendees', AttachEventAttendee::class);
+});
 
 // Public Transit
 Route::get('transit', TransitController::class);
