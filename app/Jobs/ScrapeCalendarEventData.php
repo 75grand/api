@@ -32,7 +32,6 @@ class ScrapeCalendarEventData implements ShouldQueue
     public function middleware(): array
     {
         return [
-            // Scrape only one course at a time
             (new WithoutOverlapping)
                 ->expireAfter(15) // 15 second timeout
                 ->releaseAfter(1) // 1 second between request
