@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CalendarEventResource;
 use App\Models\CalendarEvent;
 use Illuminate\Http\Request;
 
@@ -12,13 +13,7 @@ class ShowEvent extends Controller
      */
     public function __invoke(CalendarEvent $event, Request $request)
     {
-        return $event->loadCount('users as attendees')->only([
-            'id',
-            'title', 'description',
-            'location', 'latitude', 'longitude',
-            'start_date', 'end_date',
-            'calendar_name', 'image_url', 'url',
-            'attendees'
-        ]);
+        $event->loadCount('users');
+        return new CalendarEventResource($event);
     }
 }
