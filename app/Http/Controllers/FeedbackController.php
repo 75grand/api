@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class SendFeedback extends Controller
+class FeedbackController extends Controller
 {
     /**
      * Handle the incoming request.
@@ -16,11 +16,9 @@ class SendFeedback extends Controller
             'message' => 'required|string'
         ]);
 
-        dispatch(function() use ($data) {
-            webhook_alert('New feedback', [
-                'Email' => $data['email'] ?? '(no email provided)',
-                'Message' => $data['message']
-            ]);
-        })->afterResponse();
+        webhook_alert('New feedback', [
+            'Email' => $data['email'] ?? '(no email provided)',
+            'Message' => $data['message']
+        ]);
     }
 }
