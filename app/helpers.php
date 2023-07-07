@@ -42,7 +42,7 @@ if(!function_exists('image_cdn_url')) {
             'fit' => 'cover',
             'q' => $quality,
             'trim' => $trim
-        ]);
+        ], encoding_type: PHP_QUERY_RFC3986);
     }
 }
 
