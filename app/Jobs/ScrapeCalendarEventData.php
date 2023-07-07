@@ -10,6 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use voku\helper\HtmlDomParser;
 
 class ScrapeCalendarEventData implements ShouldQueue
@@ -41,19 +42,20 @@ class ScrapeCalendarEventData implements ShouldQueue
      */
     public function handle(): void
     {
+        Log::info("scraping calendar data for {$this->event->title} ({$this->event->id})");
         $dom = HtmlDomParser::file_get_html($this->event->url);
 
         if($image = $dom->findOneOrFalse('.context-image__image')) {
-            $this->event->image_url = $image->getAttribute('src');
+            $this->event->image_url = $image->getAttribute('src') ?: null;
         }
 
         if($location = $dom->findOneOrFalse('#location-box')) {
-            $this->event->latitude = $location->getAttribute('data-lat');
-            $this->event->longitude = $location->getAttribute('data-lon');
+            $this->event->latitude = $location->getAttribute('data-lat') ?: null;
+            $this->event->longitude = $location->getAttribute('data-lon') ?: null;
         }
 
         if($link = $dom->findOneOrFalse('.events-single-details__right .base-cta-featured')) {
-            $this->event->url = $link->getAttribute('href');
+            $this->event->url = $link->getAttribute('href') ?: null;
         }
 
         $this->event->checked_for_data = true;
