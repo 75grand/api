@@ -3,7 +3,7 @@
 use App\Http\Controllers\AttachEventAttendee;
 use App\Http\Controllers\MobileAuthController;
 use App\Http\Controllers\CourseCatalogController;
-use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\SendFeedback;
 use App\Http\Controllers\HoursController;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\MenuController;
@@ -23,7 +23,7 @@ Route::get('status', fn() => 'ok');
 Route::get('courses/{term:code}', [CourseCatalogController::class, 'index']);
 
 // Feedback
-Route::post('feedback', FeedbackController::class);
+Route::post('feedback', SendFeedback::class);
 
 // Building Hours
 Route::get('hours', HoursController::class);
