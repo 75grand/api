@@ -53,10 +53,12 @@ class MobileAuthController extends Controller
         ]);
 
         if($user->wasRecentlyCreated) {
-            webhook_alert('New User', [
-                'Name' => $user->name,
-                'Email' => $user->email
-            ], $user->avatar);
+            dispatch(function() use ($user) {
+                webhook_alert('New User', [
+                    'Name' => $user->name,
+                    'Email' => $user->email
+                ], $user->avatar);
+            })->afterResponse();
         }
 
         $data = json_decode(request('state'), true);
