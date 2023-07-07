@@ -32,7 +32,8 @@ class AppServiceProvider extends ServiceProvider
 
         Queue::failing(function(JobFailed $event) {
             webhook_alert('Job Failed', [
-                'Job' => $event->job->getName(),
+                'Name' => $event->job->getName(),
+                'Body' => '```' . $event->job->getRawBody() . '```',
                 'Connection' => $event->connectionName
             ]);
         });
