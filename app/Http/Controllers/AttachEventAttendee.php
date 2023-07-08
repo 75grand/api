@@ -19,7 +19,5 @@ class AttachEventAttendee extends Controller
         } else {
             $request->user()->events()->detach($event);
         }
-
-        return (new ListEventAttendees)($event);
     }
 }
