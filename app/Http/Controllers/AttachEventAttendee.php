@@ -12,7 +12,7 @@ class AttachEventAttendee extends Controller
      */
     public function __invoke(CalendarEvent $event, Request $request)
     {
-        $data = $request->validate(['attending' => 'required|boolean']);
+        $data = $request->validate(['attending' => 'required,boolean']);
         
         if($data['attending']) {
             $request->user()->events()->syncWithoutDetaching($event);
