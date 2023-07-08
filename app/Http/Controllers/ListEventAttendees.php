@@ -12,6 +12,6 @@ class ListEventAttendees extends Controller
      */
     public function __invoke(CalendarEvent $event)
     {
-        return $event->users()->select(['id', 'name', 'avatar'])->get();
+        return $event->users()->select(['id', 'avatar'])->get();
     }
 }

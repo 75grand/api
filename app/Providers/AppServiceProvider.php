@@ -31,6 +31,16 @@ class AppServiceProvider extends ServiceProvider
     {
         JsonResource::withoutWrapping();
 
+        // DB::listen(function($query) {
+        //     Log::info(
+        //         $query->sql,
+        //         [
+        //             'bindings' => $query->bindings,
+        //             'time' => $query->time
+        //         ]
+        //     );
+        // });
+
         Http::globalRequestMiddleware(function($request) {
             return $request->withHeader('User-Agent', 'api@75grand.net');
         });
