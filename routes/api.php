@@ -56,4 +56,6 @@ Route::get('authentication', [MobileAuthController::class, 'redirect']);
 // User Accounts
 Route::middleware('auth:sanctum')->group(function() {
     Route::get('user', [UserController::class, 'show']);
+    Route::patch('user', [UserController::class, 'update']);
+    Route::put('user', [UserController::class, 'update']);
 });
