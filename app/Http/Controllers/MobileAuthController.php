@@ -45,6 +45,11 @@ class MobileAuthController extends Controller
             401, 'Please use a Macalester email address'
         );
 
+        abort_if(
+            str_contains($googleUser->name, 'Student Org'),
+            400, 'Please use a personal email account'
+        );
+
         $user = User::updateOrCreate([
             'email' => $googleUser->email
         ], [
