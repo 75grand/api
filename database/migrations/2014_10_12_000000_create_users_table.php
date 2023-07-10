@@ -22,6 +22,8 @@ return new class extends Migration
 
             $table->string('expo_token')->nullable();
             $table->string('macpass_number')->nullable();
+            $table->integer('class_year')->nullable();
+            $table->boolean('is_student')->nullable();
 
             $table->timestamps();
         });

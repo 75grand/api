@@ -15,7 +15,9 @@ class UserController extends Controller
     {
         $data = $request->validate([
             'expo_token' => ['nullable', 'string'],
-            'macpass_number' => ['nullable', 'string', 'numeric', 'digits:9']
+            'macpass_number' => ['nullable', 'string', 'numeric', 'digits:9'],
+            'class_year' => ['nullable', 'integer', 'digits:4'],
+            'is_student' => ['nullable', 'boolean']
         ]);
 
         $request->user()->update($data);
