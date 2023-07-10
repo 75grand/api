@@ -22,7 +22,7 @@ class MenuController extends Controller
         // Atrium      = 161
         // Coffee Cart = 2109
 
-        return cache()->remember($request->path(), now()->addHours(12), function() use ($date) {
+        return cache()->remember($request->path(), now()->addHour(), function() use ($date) {
             $cafeId = 159;
             $data = Http::get("https://legacy.cafebonappetit.com/api/1/cafe/$cafeId/date/$date")->json();
 
