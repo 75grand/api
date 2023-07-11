@@ -17,7 +17,7 @@ class UserController extends Controller
             'expo_token' => ['nullable', 'string'],
             'macpass_number' => ['nullable', 'string', 'numeric', 'digits:9'],
             'class_year' => ['nullable', 'integer', 'digits:4'],
-            'type' => ['nullable', 'string', 'in:student,professor,staff'],
+            'position' => ['nullable', 'string', 'in:student,professor,staff'],
             'po_combination' => ['nullable', 'string', 'regex:/^\d+-\d+-\d+$/'],
             'po_number' => ['nullable', 'integer']
         ]);

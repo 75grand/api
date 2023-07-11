@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('expo_token')->nullable();
             $table->string('macpass_number')->nullable();
             $table->integer('class_year')->nullable();
-            $table->string('type')->nullable(); // e.g. student, professor, staff
+            $table->string('position')->nullable(); // e.g. student, professor, staff
 
             $table->string('po_combination')->nullable();
             $table->integer('po_number')->nullable();
