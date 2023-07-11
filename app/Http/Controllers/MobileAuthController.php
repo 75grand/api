@@ -80,7 +80,7 @@ class MobileAuthController extends Controller
             $callback = $data['callback_url'] . '?token=' . $token;
         }
 
-        $callback = $callback . '&created=' . ($user->wasRecentlyCreated ? 'true' : 'false');
+        if($user->wasRecentlyCreated) $callback = $callback . '&created=true';
 
         return redirect()->away($callback);
     }
