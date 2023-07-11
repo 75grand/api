@@ -25,6 +25,9 @@ return new class extends Migration
             $table->integer('class_year')->nullable();
             $table->string('type')->nullable(); // e.g. student, professor, staff
 
+            $table->string('po_combination')->nullable();
+            $table->integer('po_number')->nullable();
+
             $table->timestamps();
         });
     }
