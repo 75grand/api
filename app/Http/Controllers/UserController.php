@@ -21,8 +21,8 @@ class UserController extends Controller
             'macpass_number' => ['nullable', 'string', 'numeric', 'digits:9'],
             'class_year' => ['nullable', 'integer', Rule::in($years)],
             'position' => ['nullable', 'string', 'in:student,professor,staff'],
-            'po_combination' => ['nullable', 'string', 'regex:/^\d+-\d+-\d+$/'],
-            'po_number' => ['nullable', 'integer']
+            'mailbox_combination' => ['nullable', 'string', 'regex:/^\d+-\d+-\d+$/'],
+            'mailbox_number' => ['nullable', 'integer']
         ]);
 
         $request->user()->update($data);

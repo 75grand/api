@@ -25,8 +25,8 @@ return new class extends Migration
             $table->smallInteger('class_year')->nullable();
             $table->string('position')->nullable(); // e.g. student, professor, staff
 
-            $table->string('po_combination')->nullable();
-            $table->integer('po_number')->nullable();
+            $table->string('mailbox_combination')->nullable();
+            $table->integer('mailbox_number')->nullable();
 
             $table->timestamps();
         });
