@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -9,7 +10,8 @@ class UserController extends Controller
 {
     public function show(Request $request)
     {
-        return $request->user();
+        $user = $request->user()->loadCount('referrals');
+        return new UserResource($user);
     }
 
     public function update(Request $request)
