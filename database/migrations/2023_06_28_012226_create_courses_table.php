@@ -23,8 +23,8 @@ return new class extends Migration
             $table->bigInteger('crn');
             $table->string('number');
 
-            $table->foreignIdFor(Term::class);
-            $table->foreignIdFor(Subject::class);
+            $table->foreignIdFor(Term::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Subject::class)->constrained()->cascadeOnDelete();
             $table->string('sequence_number');
             $table->integer('credits');
             $table->string('location')->nullable(); // e.g. THEATR 120

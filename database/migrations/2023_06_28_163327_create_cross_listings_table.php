@@ -13,8 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cross_listings', function (Blueprint $table) {
-            $table->foreignIdFor(Course::class, 'course_a');//->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(Course::class, 'course_b');//->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Course::class, 'course_a')->constrained('courses')->cascadeOnDelete();
+            $table->foreignIdFor(Course::class, 'course_b')->constrained('courses')->cascadeOnDelete();
             $table->unique(['course_a', 'course_b']);
         });
     }

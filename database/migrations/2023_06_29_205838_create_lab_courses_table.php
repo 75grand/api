@@ -13,8 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('lab_courses', function (Blueprint $table) {
-            $table->foreignIdFor(Course::class, 'main_course_id');//->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(Course::class, 'lab_course_id');//->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Course::class, 'main_course_id')->constrained('courses')->cascadeOnDelete();
+            $table->foreignIdFor(Course::class, 'lab_course_id')->constrained('courses')->cascadeOnDelete();
             $table->unique(['main_course_id', 'lab_course_id']);
         });
     }
