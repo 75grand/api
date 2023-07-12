@@ -15,6 +15,16 @@ class User extends Authenticatable
 
     protected $hidden = ['expo_token', 'pivot'];
 
+    public function referrer()
+    {
+        return $this->belongsTo(self::class, 'referrer_id');
+    }
+
+    public function referrals()
+    {
+        return $this->hasMany(self::class, 'referrer_id');
+    }
+
     public function events()
     {
         return $this->belongsToMany(CalendarEvent::class);

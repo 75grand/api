@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
-use Nette\InvalidStateException;
+use Illuminate\Support\Str;
 
 class MobileAuthController extends Controller
 {
@@ -23,7 +23,8 @@ class MobileAuthController extends Controller
                     'hd' => 'macalester.edu',
                     'state' => json_encode([
                         'device' => request('device'),
-                        'callback_url' => request('callback_url')
+                        'callback_url' => request('callback_url'),
+                        'referral_code' => request('referral_code')
                     ])
                 ])
                 ->redirect()
@@ -31,10 +32,8 @@ class MobileAuthController extends Controller
         ];
     }
 
-    public function callback()
+    private function validateRequest($googleUser)
     {
-        $googleUser = Socialite::driver('google')->stateless()->user();
-
         abort_unless(
             request()->has('state'),
             400, 'Missing `state` parameter'
@@ -49,6 +48,21 @@ class MobileAuthController extends Controller
             str_contains($googleUser->name, 'Student Org'),
             400, 'Please use a personal email account'
         );
+    }
+
+    private function getToken(User $user, string $device): string
+    {
+        $user->tokens()->where('name', $device)->delete();
+        return $user->createToken($device)->plainTextToken;
+    }
+
+    public function callback()
+    {
+        $googleUser = Socialite::driver('google')->stateless()->user();
+
+        $this->validateRequest($googleUser);
+
+        $data = json_decode(request('state'), true);
 
         $user = User::updateOrCreate([
             'email' => $googleUser->email
@@ -57,22 +71,7 @@ class MobileAuthController extends Controller
             'avatar' => $googleUser->avatar
         ]);
 
-        if($user->wasRecentlyCreated) {
-            dispatch(function() use ($user) {
-                webhook_alert('New User', [
-                    'Name' => $user->name,
-                    'Email' => $user->email
-                ], $user->avatar);
-            })->afterResponse();
-        }
-
-        $data = json_decode(request('state'), true);
-
-        // Delete existing tokens for this device
-        $user->tokens()->where('name', $data['device'])->delete();
-
-        // Create a new token for this device
-        $token = $user->createToken($data['device'])->plainTextToken;
+        $token = $this->getToken($user, $data['device']);
 
         if(str_contains($data['callback_url'], '?')) {
             $callback = $data['callback_url'] . '&token=' . $token;
@@ -80,7 +79,32 @@ class MobileAuthController extends Controller
             $callback = $data['callback_url'] . '?token=' . $token;
         }
 
-        if($user->wasRecentlyCreated) $callback = $callback . '&created=true';
+        if($user->wasRecentlyCreated) {
+            $callback = $callback . '&created=true';
+
+            $webhookData = [
+                'Name' => $user->name,
+                'Email' => $user->email
+            ];
+
+            // Generate random referral code for user
+            $user->referral_code = strtolower(Str::random(6));
+
+            // Save referral information
+            if(!empty($data['referral_code'])) {
+                $referralCode = strtolower(trim($data['referral_code']));
+                $invitingUser = User::firstWhere('referral_code', $referralCode);
+                abort_if($invitingUser === null, 400, 'Referral code is invalid');
+                $user->referrer_id = $invitingUser->id;
+                $webhookData['Referred By'] = $invitingUser->name;
+            }
+
+            $user->save();
+
+            dispatch(function() use ($user, $webhookData) {
+                webhook_alert('New User', $webhookData, $user->avatar);
+            })->afterResponse();
+        }
 
         return redirect()->away($callback);
     }
