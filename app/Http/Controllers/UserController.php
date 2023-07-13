@@ -29,6 +29,7 @@ class UserController extends Controller
 
         $request->user()->update($data);
 
-        return $request->user();
+        $user = $request->user()->loadCount('referrals');
+        return new UserResource($user);
     }
 }
