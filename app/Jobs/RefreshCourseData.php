@@ -34,6 +34,9 @@ class RefreshCourseData implements ShouldQueue
                 RefreshCourseDescriptions::dispatch($term);
             });
 
+        Log::info('refreshing professor reviews');
+        RefreshRateMyProfessorsData::dispatch();
+
         Log::info('scraping prerequisites');
         Course::whereNull('prerequisites')
             ->get()->each(function($course) {
