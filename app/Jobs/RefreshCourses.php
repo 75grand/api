@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Course;
 use App\Models\DistRequirement;
+use App\Models\Professor;
 use App\Models\Subject;
 use App\Models\Term;
 use Carbon\Carbon;
@@ -41,13 +42,6 @@ class RefreshCourses implements ShouldQueue
             $room = $course['meetingsFaculty'][0]['meetingTime']['room'];
             $location = $building && $room ? "$building $room" : null;
 
-            $professor = null;
-            if(!empty($course['faculty'])) {
-                $professor = $course['faculty'][0]['displayName']; // e.g. Cantrell, Paul
-                $professor = explode(', ', $professor);
-                $professor = implode(' ', array_reverse($professor)); // Paul Cantrell
-            }
-
             $days = array_values(array_filter([
                 empty($course['meetingsFaculty'][0]['meetingTime']['sunday']) ? false : 0,
                 empty($course['meetingsFaculty'][0]['meetingTime']['monday']) ? false : 1,
@@ -78,7 +72,7 @@ class RefreshCourses implements ShouldQueue
                 'location' => $location,
                 'max_enrollment' => $course['crossListCapacity'] ?? $course['maximumEnrollment'],
                 'enrollment' => $course['crossListCount'] ?? $course['enrollment'],
-                'professor' => $professor,
+                'professor_id' => $this->getProfessor($course['faculty'])->id ?? null,
                 'days' => $days,
                 'start_time' => $startTime,
                 'end_time' => $endTime
@@ -141,6 +135,25 @@ class RefreshCourses implements ShouldQueue
         }
 
         return $courses;
+    }
+
+    /**
+     * @param array $faculty The raw `faculty` item from the course response
+     * @todo Cache these to prevent excessive queries?
+     */
+    private function getProfessor(array $faculty): ?Professor
+    {
+        if(empty($faculty)) return null;
+
+        $name = $faculty[0]['displayName']; // e.g. Cantrell, Paul
+        $name = explode(', ', $name);
+        $name = implode(' ', array_reverse($name)); // Paul Cantrell
+
+        return Professor::firstOrCreate([
+            'name' => $name
+        ], [
+            'email' => $faculty[0]['emailAddress']
+        ]);
     }
 
     /**

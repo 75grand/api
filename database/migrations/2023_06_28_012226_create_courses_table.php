@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Professor;
 use App\Models\Subject;
 use App\Models\Term;
 use Illuminate\Database\Migrations\Migration;
@@ -32,7 +33,7 @@ return new class extends Migration
             $table->integer('max_enrollment');
             $table->integer('enrollment');
 
-            $table->string('professor')->nullable(); // e.g. Andrew Beveridge
+            $table->foreignIdFor(Professor::class)->nullable()->constrained()->cascadeOnDelete();
 
             // You're welcome or I'm truly sorry, it could work out either way
             // https://www.notion.so/jeromepaulos/63dc008b0986498486dc58b263b69b41
