@@ -9,8 +9,6 @@ class Course extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
-
     protected $hidden = ['pivot'];
 
     protected $casts = [

@@ -11,7 +11,6 @@ class CalendarEvent extends Model
     use HasFactory;
 
     public $timestamps = false;
-    protected $guarded = [];
 
     protected $casts = [
         'checked_for_data' => 'boolean',

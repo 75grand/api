@@ -11,8 +11,6 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $guarded = [];
-
     protected $hidden = ['expo_token', 'pivot'];
 
     public function referrer()
