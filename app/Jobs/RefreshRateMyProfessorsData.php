@@ -61,7 +61,7 @@ class RefreshRateMyProfessorsData implements ShouldQueue
                 'difficulty' => $professor['avgDifficultyRounded'],
                 'rating' => $professor['avgRatingRounded'],
                 'rating_count' => $professor['numRatings'],
-                'would_take_again' => $professor['wouldTakeAgainPercentRounded'],
+                'take_again_percent' => $professor['wouldTakeAgainPercentRounded'],
                 'featured_review' => $review,
                 'ratings_distribution' => [
                     '1' => $professor['ratingsDistribution']['r1'],
