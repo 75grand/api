@@ -72,7 +72,7 @@ class RefreshCourses implements ShouldQueue
                 'location' => $location,
                 'max_enrollment' => $course['crossListCapacity'] ?? $course['maximumEnrollment'],
                 'enrollment' => $course['crossListCount'] ?? $course['enrollment'],
-                'professor_id' => $this->getProfessor($course['faculty'])->id,
+                'professor_id' => $this->getProfessor($course['faculty'])->id ?? null,
                 'days' => $days,
                 'start_time' => $startTime,
                 'end_time' => $endTime
