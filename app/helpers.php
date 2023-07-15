@@ -48,7 +48,7 @@ if(!function_exists('image_cdn_url')) {
 
 if(!function_exists('webhook_alert')) {
     function webhook_alert(string $title, array $fields, string $thumbnail = '') {
-        if(!env('DISCORD_WEBHOOK')) return;
+        if(!env('DISCORD_WEBHOOK') || app()->isLocal()) return;
     
         foreach($fields as $key => &$value) {
             $value = [
