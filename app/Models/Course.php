@@ -22,6 +22,11 @@ class Course extends Model
         return $this->belongsToMany(DistRequirement::class);
     }
 
+    public function professor()
+    {
+        return $this->belongsTo(Professor::class);
+    }
+
     public function subject()
     {
         return $this->belongsTo(Subject::class);
