@@ -55,13 +55,16 @@ class RefreshRateMyProfessorsData implements ShouldQueue
             $review = $professor['mostUsefulRating']['comment'] ?? null;
             if(strlen($review) < 10) $review = null;
 
+            $takeAgainPercent = $professor['wouldTakeAgainPercentRounded'];
+            if($takeAgainPercent < 0) $takeAgainPercent = null;
+
             Professor::where(
                 'name', $professor['firstName'] . ' ' . $professor['lastName']
             )->update([
                 'difficulty' => $professor['avgDifficultyRounded'],
                 'rating' => $professor['avgRatingRounded'],
                 'rating_count' => $professor['numRatings'],
-                'take_again_percent' => $professor['wouldTakeAgainPercentRounded'],
+                'take_again_percent' => $takeAgainPercent,
                 'featured_review' => $review,
                 'ratings_distribution' => [
                     '1' => $professor['ratingsDistribution']['r1'],
