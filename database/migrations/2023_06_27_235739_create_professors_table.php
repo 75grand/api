@@ -16,12 +16,11 @@ return new class extends Migration
 
             $table->string('name')->index();
             $table->string('email');
-            $table->string('department')->nullable();
 
             $table->float('difficulty')->nullable();
             $table->float('rating')->nullable();
-            $table->float('rating_count')->nullable();
-            $table->integer('would_take_again')->nullable();
+            $table->integer('rating_count')->nullable();
+            $table->integer('take_again_percent')->nullable();
             $table->json('ratings_distribution')->nullable(); // e.g. { "1": 0, "2": 0, "3": 0, "4": 3, "5": 13 }
 
             $table->text('featured_review')->nullable();
