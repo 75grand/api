@@ -52,6 +52,9 @@ class RefreshRateMyProfessorsData implements ShouldQueue
         foreach($professors as $professor) {
             $professor = $professor['node'];
 
+            $review = $professor['mostUsefulRating']['comment'] ?? null;
+            if(strlen($review) < 10) $review = null;
+
             Professor::where(
                 'name', $professor['firstName'] . ' ' . $professor['lastName']
             )->update([
@@ -59,7 +62,7 @@ class RefreshRateMyProfessorsData implements ShouldQueue
                 'rating' => $professor['avgRatingRounded'],
                 'rating_count' => $professor['numRatings'],
                 'would_take_again' => $professor['wouldTakeAgainPercentRounded'],
-                'featured_review' => $professor['mostUsefulRating']['comment'] ?? null,
+                'featured_review' => $review,
                 'ratings_distribution' => [
                     '1' => $professor['ratingsDistribution']['r1'],
                     '2' => $professor['ratingsDistribution']['r2'],
