@@ -24,6 +24,7 @@ class UserResource extends JsonResource
             $this->mergeWhen($sameUser, [
                 'referral_code' => $this->referral_code,
                 'referrals_count' => $this->whenCounted('referrals'),
+                'referrals_per_prize' => 5,
                 'macpass_number' => $this->macpass_number,
                 'class_year' => $this->class_year,
                 'position' => $this->position,
