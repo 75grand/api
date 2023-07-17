@@ -20,6 +20,7 @@ class ListingController extends Controller
             ->withCount('savedBy')
             ->latest()
             ->orderBy('saved_by_count', 'desc')
+            ->orderBy('available', 'desc')
             ->get()
             ->map->only(['id', 'title', 'image_url', 'price', 'available']);
     }
