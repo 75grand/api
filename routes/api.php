@@ -11,6 +11,7 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NewsSource;
 use App\Http\Controllers\ListEventAttendees;
 use App\Http\Controllers\ListEvents;
+use App\Http\Controllers\ListingController;
 use App\Http\Controllers\ShowEvent;
 use App\Http\Controllers\TransitController;
 use App\Http\Controllers\UserController;
@@ -19,8 +20,13 @@ use Illuminate\Support\Facades\Route;
 // API Health Check
 Route::get('status', fn() => 'ok');
 
+// Marketplace
+Route::middleware('auth:sanctum')->group(function() {
+    Route::apiResource('listings', ListingController::class);
+});
+
 // Course Catalog
-Route::get('courses/{term:code}', [CourseCatalogController::class, 'index']);
+// Route::get('courses/{term:code}', [CourseCatalogController::class, 'index']);
 
 // Feedback
 Route::post('feedback', SendFeedback::class);

@@ -23,6 +23,16 @@ class User extends Authenticatable
         return $this->hasMany(self::class, 'referrer_id');
     }
 
+    public function listings()
+    {
+        return $this->hasMany(Listing::class);
+    }
+
+    public function savedListings()
+    {
+        return $this->belongsToMany(Listing::class);
+    }
+
     public function events()
     {
         return $this->belongsToMany(CalendarEvent::class);

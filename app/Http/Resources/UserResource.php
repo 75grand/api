@@ -20,16 +20,14 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
+            'phone' => $this->phone,
             'avatar' => $this->avatar,
+            'position' => $this->position,
+            'class_year' => $this->class_year,
             $this->mergeWhen($sameUser, [
                 'referral_code' => $this->referral_code,
                 'referrals_count' => $this->whenCounted('referrals'),
                 'referrals_per_prize' => 5,
-                'macpass_number' => $this->macpass_number,
-                'class_year' => $this->class_year,
-                'position' => $this->position,
-                'mailbox_combination' => $this->mailbox_combination,
-                'mailbox_number' => $this->mailbox_number,
                 'created_at' => $this->created_at
             ])
         ];

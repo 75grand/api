@@ -19,18 +19,15 @@ return new class extends Migration
 
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('phone')->nullable();
             $table->string('avatar');
 
             $table->string('referral_code')->nullable();
             $table->foreignIdFor(User::class, 'referrer_id')->nullable()->constrained('users')->nullOnDelete();
 
             $table->string('expo_token')->nullable();
-            $table->string('macpass_number')->nullable();
             $table->smallInteger('class_year')->nullable();
             $table->string('position')->nullable(); // e.g. student, professor, staff
-
-            $table->string('mailbox_combination')->nullable();
-            $table->integer('mailbox_number')->nullable();
 
             $table->timestamps();
         });
