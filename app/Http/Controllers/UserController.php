@@ -21,7 +21,8 @@ class UserController extends Controller
         $data = $request->validate([
             'expo_token' => ['nullable', 'string'],
             'class_year' => ['nullable', 'integer', Rule::in($years)],
-            'position' => ['nullable', 'string', 'in:student,professor,staff']
+            'position' => ['nullable', 'string', 'in:student,professor,staff'],
+            'phone' => ['nullable', 'string', 'digits:10']
         ]);
 
         $request->user()->update($data);
