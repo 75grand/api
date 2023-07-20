@@ -15,12 +15,12 @@ class ListingController extends Controller
     public function index()
     {
         return Listing::query()
+            ->select(['id', 'title', 'image_url', 'price', 'available', 'miles_from_campus'])
             ->where('available', true)
             ->orWhereDate('updated_at', '>=', now()->subWeek())
-            ->latest()
             ->orderBy('available', 'desc')
-            ->get()
-            ->map->only(['id', 'title', 'image_url', 'price', 'available']);
+            ->latest()
+            ->get();
     }
 
     /**
@@ -31,8 +31,9 @@ class ListingController extends Controller
         $data = $request->validate([
             'title' => ['required', 'string'],
             'description' => ['nullable', 'string', 'max:500'],
-            'price' => ['required', 'integer', 'max_digits:4'],
-            'image' => ['required', 'image', 'max:10000']
+            'price' => ['required', 'integer', 'min:0', 'max:1000'],
+            'image' => ['required', 'image', 'max:10000'],
+            'miles_from_campus' => ['required', 'integer', 'min:0', 'max:9']
         ]);
 
         $name = $data['image']->hashName();
@@ -64,8 +65,9 @@ class ListingController extends Controller
         $data = $request->validate([
             'title' => 'string',
             'description' => ['nullable', 'string', 'max:500'],
-            'price' => ['integer', 'max_digits:4'],
-            'available' => 'boolean'
+            'price' => ['integer', 'min:0', 'max:1000'],
+            'available' => 'boolean',
+            'miles_from_campus' => ['integer', 'min:0', 'max:9']
         ]);
 
         $listing->update($data);
