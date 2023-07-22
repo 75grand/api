@@ -48,6 +48,10 @@ class HoursController extends Controller
                 );
             }
 
+            usort($results, function($a, $b) {
+                return strcmp($a['name'], $b['name']);
+            });
+
             return $results;
         });
     }
