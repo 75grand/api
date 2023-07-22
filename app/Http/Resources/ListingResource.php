@@ -23,8 +23,7 @@ class ListingResource extends JsonResource
             'available' => $this->available,
             'miles_from_campus' => $this->miles_from_campus,
             'user' => new UserResource($this->whenLoaded('user')),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'created_at' => $this->created_at
         ];
     }
 }
