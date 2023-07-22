@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ListingResource;
 use App\Models\Listing;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ListingController extends Controller
@@ -12,15 +13,18 @@ class ListingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Listing::query()
-            ->select(['id', 'title', 'image_url', 'price', 'available', 'miles_from_campus'])
+        $listings = Listing::query()
             ->where('available', true)
             ->orWhereDate('updated_at', '>=', now()->subWeek())
             ->orderBy('available', 'desc')
             ->latest()
+            ->orderByRaw('user_id = ?', $request->user()->id)
+            ->with('user')
             ->get();
+
+        return ListingResource::collection($listings);
     }
 
     /**
