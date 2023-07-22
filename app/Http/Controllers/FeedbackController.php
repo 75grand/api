@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class SendFeedback extends Controller
+class FeedbackController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Store a newly created resource in storage.
      */
-    public function __invoke(Request $request)
+    public function store(Request $request)
     {
-        $data = request()->validate([
+        $data = $request->validate([
             'email' => 'nullable|email',
             'message' => 'required|string'
         ]);

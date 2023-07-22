@@ -4,7 +4,7 @@ use App\Http\Controllers\CalendarEventController;
 use App\Http\Controllers\MobileAuthController;
 use App\Http\Controllers\CourseCatalogController;
 use App\Http\Controllers\EventAttendeeController;
-use App\Http\Controllers\SendFeedback;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HoursController;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\MenuController;
@@ -27,7 +27,7 @@ Route::middleware('auth:sanctum')->group(function() {
 // Route::get('courses/{term:code}', [CourseCatalogController::class, 'index']);
 
 // Feedback
-Route::post('feedback', SendFeedback::class);
+Route::post('feedback', [FeedbackController::class, 'store']);
 
 // Building Hours
 Route::get('hours', HoursController::class);
