@@ -41,7 +41,8 @@ if(!function_exists('image_cdn_url')) {
             'h' => $height,
             'fit' => 'cover',
             'q' => $quality,
-            'trim' => $trim
+            'trim' => $trim,
+            'output' => 'webp'
         ], encoding_type: PHP_QUERY_RFC3986);
     }
 }
