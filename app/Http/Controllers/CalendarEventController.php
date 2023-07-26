@@ -13,21 +13,21 @@ class CalendarEventController extends Controller
      */
     public function index()
     {
-        $calendarEvents = CalendarEvent::query()
+        $events = CalendarEvent::query()
             ->whereDate('end_date', '>=', now())
             ->orderBy('start_date')
             ->withCount('users')
             ->get();
 
-        return CalendarEventResource::collection($calendarEvents);
+        return CalendarEventResource::collection($events);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(CalendarEvent $calendarEvent)
+    public function show(CalendarEvent $event)
     {
-        $calendarEvent->loadCount('users');
-        return new CalendarEventResource($calendarEvent);
+        $event->loadCount('users');
+        return new CalendarEventResource($event);
     }
 }
