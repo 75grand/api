@@ -36,7 +36,7 @@ class ListingController extends Controller
             'title' => ['required', 'string'],
             'description' => ['nullable', 'string', 'max:500'],
             'price' => ['required', 'integer', 'min:0', 'max:1000'],
-            'image' => ['required', 'image', 'max:10000'],
+            'image' => ['required', 'image', 'max:15000'], // 15 MB
             'miles_from_campus' => ['required', 'integer', 'min:0', 'max:9']
         ]);
 
