@@ -19,6 +19,9 @@ class Kernel extends ConsoleKernel
     {
         $schedule->job(new RefreshCalendars)->hourlyAt(30)->sentryMonitor('refresh-calendars');
         $schedule->job(new RefreshCourseData)->dailyAt('4:00')->sentryMonitor('refresh-course-data');
+
+        // https://laravel.com/docs/10.x/telescope#data-pruning
+        $schedule->command('telescope:prune')->daily();
     }
 
     /**
