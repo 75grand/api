@@ -51,8 +51,8 @@ Route::get('transit', TransitController::class);
 Route::get('map', [MapController::class, 'index']);
 
 // Dining Hall Menus
-Route::get('menu/{date}', [MenuController::class, 'index'])->where('date', '\d{4}-\d{2}-\d{2}');
-Route::get('menu/item/{id}', [MenuController::class, 'show'])->whereNumber('id');
+Route::get('menus/{date}', [MenuController::class, 'index'])->where('date', '\d{4}-\d{2}-\d{2}');
+Route::get('menus/item/{id}', [MenuController::class, 'show'])->whereNumber('id');
 
 // Authentication
 Route::get('authentication', [MobileAuthController::class, 'redirect']);
