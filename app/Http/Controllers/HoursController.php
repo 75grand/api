@@ -24,7 +24,13 @@ class HoursController extends Controller
             $results = [];
 
             foreach($calendars as $calendarUrl) {
-                $calendar = new ICal($calendarUrl);
+                $calendar = new ICal($calendarUrl, [
+                    'defaultSpan' => 1,
+                    'filterDaysAfter' => 20,
+                    'filterDaysBefore' => 1,
+                    'httpUserAgent' => 'api@75grand.net'
+                ]);
+
                 $events = $calendar->eventsFromInterval('1 week');
     
                 $result = [];
