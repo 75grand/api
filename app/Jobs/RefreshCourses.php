@@ -7,7 +7,6 @@ use App\Models\DistRequirement;
 use App\Models\Professor;
 use App\Models\Subject;
 use App\Models\Term;
-use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -143,7 +142,9 @@ class RefreshCourses implements ShouldQueue
      */
     private function getProfessor(array $faculty): ?Professor
     {
-        if(empty($faculty)) return null;
+        if(empty($faculty[0]['displayName']) || empty($faculty[0]['emailAddress'])) {
+            return null;
+        }
 
         $name = $faculty[0]['displayName']; // e.g. Cantrell, Paul
         $name = explode(', ', $name);
