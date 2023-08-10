@@ -29,14 +29,14 @@ if(!function_exists('title_case')) {
 }
 
 if(!function_exists('image_cdn_url')) {
-    function image_cdn_url(string $image_url, $width = 0, $height = 0, $quality = 80, $trim = 0): string {
+    function image_cdn_url(string $imageUrl, $width = 0, $height = 0, $quality = 80, $trim = 0): string {
         if( // Short-circuit if URL is relative or local
-            str_starts_with($image_url, '/') ||
-            in_array(parse_url($image_url, PHP_URL_HOST), ['localhost', '127.0.0.1'])
-        ) return $image_url;
+            str_starts_with($imageUrl, '/') ||
+            in_array(parse_url($imageUrl, PHP_URL_HOST), ['localhost', '127.0.0.1'])
+        ) return $imageUrl;
     
         return 'https://wsrv.nl/?' . http_build_query([
-            'url' => $image_url,
+            'url' => $imageUrl,
             'w' => $width,
             'h' => $height,
             'fit' => 'cover',
