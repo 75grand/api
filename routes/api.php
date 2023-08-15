@@ -41,7 +41,7 @@ Route::get('events/{event}', [CalendarEventController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group(function() {
     Route::get('events/{event}/attendees', [EventAttendeeController::class, 'index']);
-    Route::post('events/{event}/attendees', [EventAttendeeController::class, 'update']);
+    Route::patch('events/{event}/attendees', [EventAttendeeController::class, 'update']);
 });
 
 // Public Transit
