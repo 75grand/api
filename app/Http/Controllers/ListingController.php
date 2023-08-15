@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ListingResource;
 use App\Models\Listing;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ListingController extends Controller
@@ -75,6 +74,7 @@ class ListingController extends Controller
         ]);
 
         $listing->update($data);
+        return new ListingResource($listing);
     }
 
     /**
