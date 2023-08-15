@@ -21,7 +21,7 @@ return new class extends Migration
 
             $table->integer('price');
             $table->boolean('available')->default(true);
-            $table->tinyInteger('miles_from_campus');
+            $table->integer('miles_from_campus');
 
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
 
