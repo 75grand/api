@@ -139,7 +139,7 @@ class ScrapePrerequisites implements ShouldQueue
             default => $subjectName
         };
 
-        $subject = Subject::where('name', 'like', "$subjectName%")->first();
+        $subject = Subject::firstWhere('name', 'like', "$subjectName%");
         if($subject === null) return null;
         return $subject;
     }

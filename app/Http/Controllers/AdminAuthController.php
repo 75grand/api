@@ -28,7 +28,7 @@ class AdminAuthController extends Controller
             return redirect()->route('auth.browser.redirect');
         }
 
-        $user = User::where('email', $googleUser->email);
+        $user = User::firstWhere('email', $googleUser->email);
         abort_if($user === null, 401);
 
         auth()->login($user);
