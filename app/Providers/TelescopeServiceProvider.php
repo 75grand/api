@@ -19,17 +19,17 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
 
         $this->hideSensitiveRequestDetails();
 
-        Telescope::filter(function (IncomingEntry $entry) {
-            if ($this->app->environment('local')) {
-                return true;
-            }
+        // Telescope::filter(function (IncomingEntry $entry) {
+        //     if ($this->app->environment('local')) {
+        //         return true;
+        //     }
 
-            return $entry->isReportableException() ||
-                   $entry->isFailedRequest() ||
-                   $entry->isFailedJob() ||
-                   $entry->isScheduledTask() ||
-                   $entry->hasMonitoredTag();
-        });
+        //     return $entry->isReportableException() ||
+        //            $entry->isFailedRequest() ||
+        //            $entry->isFailedJob() ||
+        //            $entry->isScheduledTask() ||
+        //            $entry->hasMonitoredTag();
+        // });
 
         // https://laravel.com/docs/10.x/telescope#displaying-user-avatars
         Telescope::avatar(fn(string $id) => User::find($id)->avatar);
