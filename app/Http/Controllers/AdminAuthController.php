@@ -31,6 +31,8 @@ class AdminAuthController extends Controller
         $user = User::where('email', $googleUser->email);
         abort_if($user === null, 401);
 
+        auth()->login($user);
+
         return redirect()->route('telescope');
     }
 }
