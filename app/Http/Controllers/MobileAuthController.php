@@ -40,12 +40,13 @@ class MobileAuthController extends Controller
         );
 
         abort_unless(
-            str_ends_with($googleUser->email, '@macalester.edu'),
+            Str::endsWith($googleUser->email, '@macalester.edu')
+                || $googleUser->email === 'borgersbenjamin@gmail.com',
             401, 'Please use a Macalester email address'
         );
 
         abort_if(
-            str_contains($googleUser->name, 'Student Org'),
+            Str::contains($googleUser->name, 'Student Org'),
             400, 'Please use a personal email account'
         );
     }
