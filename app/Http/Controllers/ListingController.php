@@ -74,6 +74,7 @@ class ListingController extends Controller
         ]);
 
         $listing->update($data);
+        $listing = $listing->load('user');
         return new ListingResource($listing);
     }
 
