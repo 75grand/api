@@ -8,7 +8,7 @@ Route::redirect('/', 'https://github.com/75grand/api', 301);
 
 Route::get('/auth/callback', [MobileAuthController::class, 'callback'])->name('auth.callback');
 
-Route::get('/auth/login', [AdminAuthController::class, 'redirect'])->name('auth.browser.redirect');
+Route::get('/auth/login', [AdminAuthController::class, 'redirect'])->name('login');
 Route::get('/auth/browser-callback', [AdminAuthController::class, 'callback'])->name('auth.browser.callback');
 
 Route::permanentRedirect('/redirect/reserve', 'https://ems.macalester.edu');

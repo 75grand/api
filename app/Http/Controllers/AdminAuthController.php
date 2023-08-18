@@ -25,7 +25,7 @@ class AdminAuthController extends Controller
         try {
             $googleUser = Socialite::driver('google')->user();
         } catch(InvalidStateException) {
-            return redirect()->route('auth.browser.redirect');
+            return redirect()->route('login');
         }
 
         $user = User::firstWhere('email', $googleUser->email);
