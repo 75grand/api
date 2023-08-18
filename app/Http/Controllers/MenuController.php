@@ -26,8 +26,8 @@ class MenuController extends Controller
             $cafeId = 159;
             $data = Http::get("https://legacy.cafebonappetit.com/api/1/cafe/$cafeId/date/$date")->json();
 
+            if(empty($data['cafe']['menu'][0]['days'])) return false;
             $days = $data['cafe']['menu'][0]['days'];
-            if(count($days) === 0) return false;
 
             $day = $days[0];
             $stations = $day['stations'];
