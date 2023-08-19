@@ -26,6 +26,10 @@ return new class extends Migration
             $table->foreignIdFor(User::class, 'referrer_id')->nullable()->constrained('users')->nullOnDelete();
 
             $table->string('expo_token')->nullable();
+
+            $table->string('moodle_token')->nullable();
+            $table->bigInteger('moodle_user_id')->nullable();
+
             $table->string('class_year')->nullable();
             $table->string('position')->nullable(); // e.g. student, professor, staff
 

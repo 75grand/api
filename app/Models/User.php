@@ -32,4 +32,21 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(CalendarEvent::class);
     }
+
+    /**
+     * Gets the Moodle iCal URL for this user. Use as a computed
+     * attribute, i.e. `$user->moodle_url`.
+     */
+    public function getMoodleUrlAttribute(): ?string
+    {
+        if($this->moodle_user_id && $this->moodle_token) {
+            return
+                'https://moodle.macalester.edu/calendar/export_execute.php' .
+                '?userid=' . $this->moodle_user_id .
+                '&authtoken=' . $this->moodle_token .
+                '&preset_what=all&preset_time=recentupcoming';
+        }
+
+        return null;
+    }
 }
