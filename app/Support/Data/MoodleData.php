@@ -4,6 +4,7 @@ namespace App\Support\Data;
 
 use ICal\Event;
 use ICal\ICal;
+use Illuminate\Support\Str;
 
 class MoodleData
 {
@@ -32,13 +33,15 @@ class MoodleData
 
     private static function formatClass(string $class): string
     {
-        preg_match('/(?:\D|^)(\d{3})(?:\D|$)/i', $class, $number);
-        if(count($number) !== 2) return $class;
+        // Match a separated group of three numbers
+        $number = Str::match('/(?:\D|^)(\d{3})(?:\D|$)/i', $class);
+        if(!$number) return $class;
         $number = $number[1];
 
-        preg_match('/(?:[^a-z]|^)([a-z]{4})(?:[^a-z]|$)/i', $class, $department);
-        if(count($department) !== 2) return $class;
-        $department = strtoupper($department[1]);
+        // Match a separated group of four letters
+        $department = Str::match('/(?:[^a-z]|^)([a-z]{4})(?:[^a-z]|$)/i', $class);
+        if(!$department) return $class;
+        $department = Str::upper($department[1]);
 
         return "$department $number";
     }
