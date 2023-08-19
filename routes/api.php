@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\CalendarEventController;
 use App\Http\Controllers\MobileAuthController;
-use App\Http\Controllers\CourseCatalogController;
 use App\Http\Controllers\EventAttendeeController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HoursController;
@@ -11,6 +10,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NewsSource;
 use App\Http\Controllers\ListingController;
+use App\Http\Controllers\MoodleController;
 use App\Http\Controllers\TransitController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -56,6 +56,11 @@ Route::get('menus/item/{id}', [MenuController::class, 'show'])->whereNumber('id'
 
 // Authentication
 Route::get('authentication', [MobileAuthController::class, 'redirect']);
+
+// Moodle
+Route::middleware('auth:sanctum')->group(function() {
+    Route::get('moodle', [MoodleController::class, 'index']);
+});
 
 // User Accounts
 Route::middleware('auth:sanctum')->group(function() {
