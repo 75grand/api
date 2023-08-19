@@ -1,30 +1,32 @@
 <?php
 
-namespace App\Support\Data;
+namespace App\Http\Controllers;
 
-use ICal\Event;
+use Carbon\Carbon;
 use ICal\ICal;
+use ICal\Event as ICalEvent;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class MoodleData
+class MoodleController extends Controller
 {
-    public static function get($fresh = false)
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
     {
-        if($fresh) cache()->forget(__METHOD__);
+        $url = $request->user()->moodle_url;
+        abort_if($url === null, 400);
 
-        if(!auth()->check() || auth()->user()->getMoodleUrl() === null) {
-            return null;
-        }
-
-        return cache()->remember(__METHOD__, now()->addMinutes(5), function() {
-            $url = auth()->user()->getMoodleUrl();
+        return cache()->remember(__METHOD__.$url, now()->addMinutes(5), function($url) {
             $cal = new ICal($url);
             $events = $cal->events();
-            return collect($events)->map(function(Event $event) {
+
+            return collect($events)->map(function(ICalEvent $event) {
                 return [
                     'id' => explode('@', $event->uid)[0],
-                    'title' => str_replace_last(' is due', '', $event->summary),
-                    'due' => date_create($event->dtstart)->format('c'),
+                    'title' => Str::replaceLast(' is due', '', $event->summary),
+                    'due' => Carbon::parse($event->dtstart)->format('c'),
                     'class' => self::formatClass($event->categories)
                 ];
             })->toArray();
