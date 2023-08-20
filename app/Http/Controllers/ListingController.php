@@ -33,7 +33,7 @@ class ListingController extends Controller
     {
         $data = $request->validate([
             'title' => ['required', 'string'],
-            'description' => ['nullable', 'string', 'max:500'],
+            'description' => ['required', 'string', 'max:500'],
             'price' => ['required', 'integer', 'min:0', 'max:1000'],
             'image' => ['required', 'image', 'max:20000'], // 20 MB
             'miles_from_campus' => ['required', 'integer', 'min:0', 'max:9']
