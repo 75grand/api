@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use Exception;
 use ICal\ICal;
 use ICal\Event as ICalEvent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
 class MoodleController extends Controller
@@ -18,8 +20,19 @@ class MoodleController extends Controller
         $url = $request->user()->moodle_url;
         abort_if($url === null, 400);
 
-        return cache()->remember(__METHOD__.$url, now()->addMinutes(5), function($url) {
-            $cal = new ICal($url);
+        return cache()->remember(__METHOD__.$url, now()->addMinutes(5), function() use ($url, $request) {
+            $data = Http::get($url)->body();
+
+            if(Str::contains($data, 'Invalid authentication', true)) {
+                $request->user()->update([
+                    'moodle_user_id' => null,
+                    'moodle_token' => null
+                ]);
+
+                return false;
+            }
+
+            $cal = new ICal(options: ['initString' => $data]);
             $events = $cal->events();
 
             return collect($events)->map(function(ICalEvent $event) {
@@ -30,7 +43,7 @@ class MoodleController extends Controller
                     'class' => self::formatClass($event->categories)
                 ];
             })->toArray();
-        });
+        }) ?: abort(400);
     }
 
     private static function formatClass(string $class): string
