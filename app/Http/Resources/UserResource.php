@@ -24,6 +24,7 @@ class UserResource extends JsonResource
             'avatar' => $this->avatar,
             'position' => $this->position,
             'class_year' => $this->class_year,
+            'moodle_enabled' => $this->moodle_url !== null,
             $this->mergeWhen($sameUser, [
                 'referral_code' => $this->referral_code,
                 'referrals_count' => $this->whenCounted('referrals'),
