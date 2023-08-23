@@ -9,6 +9,10 @@ module.exports = {
         extend: {
             borderColor: {
                 DEFAULT: colors.zinc[200]
+            },
+            fontFamily: {
+                serif: ['Georgia', 'serif'],
+                mono: ['Menlo', 'monospace']
             }
         },
         colors: {
