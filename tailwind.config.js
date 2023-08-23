@@ -12,7 +12,8 @@ module.exports = {
             },
             fontFamily: {
                 serif: ['Georgia', 'serif'],
-                mono: ['Menlo', 'monospace']
+                mono: ['Menlo', 'monospace'],
+                sans: ['system-ui', 'Inter', 'sans-serif']
             }
         },
         colors: {
