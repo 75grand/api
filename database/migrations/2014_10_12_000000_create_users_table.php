@@ -33,6 +33,7 @@ return new class extends Migration
             $table->string('class_year')->nullable();
             $table->string('position')->nullable(); // e.g. student, professor, staff
 
+            $table->rememberToken();
             $table->timestamps();
         });
     }
