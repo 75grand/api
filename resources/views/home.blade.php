@@ -10,7 +10,7 @@
 @endphp
 
 <x-html title="75grand: The Macalester App">
-    <div class="p-16 flex flex-col items-center text-center gap-16">
+    <div class="sm:p-16 p-8 flex flex-col items-center text-center gap-16">
         <div class="w-40">
             <x-animated-icon text="{!! $slogan !!}"/>
         </div>
@@ -29,11 +29,19 @@
             <x-phone src="/assets/screenshots/home.png"/>
         </div>
 
-        <footer>
+        <footer class="space-y-1">
             <p>
                 <span>by</span>
-                <a class="text-accent hover:underline font-semibold" target="_blank" href="https://jero.zone">Jerome Paulos</a>
+                <a class="text-accent hover:underline font-semibold" href="https://jero.zone">Jerome Paulos</a>
                 <span>’26</span>
+            </p>
+
+            <p>
+                <a class="text-accent hover:underline font-semibold" href="https://github.com/75grand">GitHub</a>
+                <span>•</span>
+                <a class="text-accent hover:underline font-semibold" href="https://www.instagram.com/75grand_net">Instagram</a>
+                <span>•</span>
+                <a class="text-accent hover:underline font-semibold" href="mailto:support@75grand.net">Email</a>
             </p>
 
             <p>
