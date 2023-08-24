@@ -1,4 +1,4 @@
-<x-page heading="Terms & Conditions" title="Terms and Conditions — 75grand">
+<x-page heading="Terms of Service" title="Terms of Service — 75grand">
 
 _Last updated Wednesday, August 23, 2023._
 
