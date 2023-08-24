@@ -1,11 +1,11 @@
 <div class="group relative">
     @if($platform === 'ios')
-        <a target="_blank" href="{{ route('download.ios') }}">
-            <img class="h-12" src="{{ url('/assets/app-store-badge.svg') }}" alt="">
+        <a draggable="false" target="_blank" href="{{ route('download.ios') }}">
+            <img draggable="false" class="h-12 active:scale-95 transition-transform" src="{{ url('/assets/app-store-badge.svg') }}" alt="">
         </a>
     @else
-        <a target="_blank" href="{{ route('download.android') }}">
-            <img class="h-12" src="{{ url('/assets/google-play-badge.svg') }}" alt="">
+        <a draggable="false" target="_blank" href="{{ route('download.android') }}">
+            <img draggable="false" class="h-12 active:scale-95 transition-transform" src="{{ url('/assets/google-play-badge.svg') }}" alt="">
         </a>
     @endif
 
