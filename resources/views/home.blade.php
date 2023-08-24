@@ -22,7 +22,7 @@
             {{-- <x-app-store-badge platform="android"/> --}}
         </div>
 
-        <div class="max-w-md">
+        <div class="max-w-md w-full">
             <x-phone src="/assets/screenshots/home.png"/>
         </div>
 
