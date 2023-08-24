@@ -16,18 +16,8 @@
         </div>
 
         <div class="space-y-4">
-            <h1 class="text-4xl font-semibold">The Macalester App</h1>
-
-            <h2 class="text-xl text-gray-500 max-w-md [text-wrap:balance]">
-                Menus,
-                campus events,
-                classifieds,
-                Moodle,
-                building hours,
-                MacPass,
-                P.O. box combination
-            </h2>
             <h1 class="text-4xl font-semibold">{{ $slogan }}</h1>
+            <x-animated-subtitle/>
         </div>
 
         <div class="flex gap-4">
