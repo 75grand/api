@@ -1,4 +1,4 @@
-<h2 class="text-xl text-gray-500 max-w-md [&>*]:transition-all">
+<h2 class="text-xl text-gray-500 max-w-lg [text-wrap:balance] [&>*]:transition-all [&>*]:whitespace-nowrap">
     <span data-screenshot="menu">Menus</span>,
     <span data-screenshot="calendar-sports"><span class="opacity-50">m</span>events</span>,
     <span data-screenshot="marketplace">marketplace</span>,

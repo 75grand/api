@@ -6,8 +6,8 @@
         <input type="hidden" name="id" value="f699b0c2f7">
     
         <div class="flex gap-2">
-            <input class="border-2 px-4 py-2 rounded-xl outline-none focus-within:border-accent transition-colors"
-                type="email" name="EMAIL" placeholder="mscot@macalester.edu" required
+            <input class="border-2 px-4 py-2 rounded-xl outline-none focus-within:border-accent transition-colors
+                w-64" type="email" name="EMAIL" placeholder="mscot@macalester.edu" required
                     autocapitalize="none" autocorrect="off">
         
             <button class="bg-accent text-white border-2 border-accent rounded-xl px-4 py-2 font-semibold
