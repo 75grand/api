@@ -41,5 +41,7 @@ module.exports = {
             brown: '#a2845e'
         }
     },
-    plugins: []
+    plugins: [
+        require('@tailwindcss/typography')
+    ]
 }

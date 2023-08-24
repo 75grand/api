@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap">
     <title>{{ $title }}</title>
     @vite('resources/css/app.css')
+    <script async src="https://beamanalytics.b-cdn.net/beam.min.js" data-token="dc450d08-0ea1-4a44-8ba3-ef4139b189a1"></script>
 </head>
 
 <body class="antialiased">
