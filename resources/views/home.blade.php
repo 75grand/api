@@ -29,26 +29,6 @@
             <x-phone src="/assets/screenshots/home.png"/>
         </div>
 
-        <footer class="space-y-1">
-            <p>
-                <span>by</span>
-                <a class="text-accent hover:underline font-semibold" href="https://jero.zone">Jerome Paulos</a>
-                <span>’26</span>
-            </p>
-
-            <p>
-                <a class="text-accent hover:underline font-semibold" href="https://github.com/75grand">GitHub</a>
-                <span>•</span>
-                <a class="text-accent hover:underline font-semibold" href="https://www.instagram.com/75grand_net">Instagram</a>
-                <span>•</span>
-                <a class="text-accent hover:underline font-semibold" href="mailto:support@75grand.net">Email</a>
-            </p>
-
-            <p>
-                <a class="text-accent hover:underline font-semibold" href="{{ route('privacy') }}">Privacy Policy</a>
-                <span>•</span>
-                <a class="text-accent hover:underline font-semibold" href="{{ route('terms') }}">Terms of Service</a>
-            </p>
-        </footer>
+        <x-footer/>
     </div>
 </x-html>
