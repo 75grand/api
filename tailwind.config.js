@@ -18,6 +18,9 @@ module.exports = {
         },
         colors: {
             accent: colors.sky[700],
+            black: colors.black,
+            white: colors.white,
+            transparent: colors.transparent,
 
             // Close enough to Apple's official gray scale
             gray: colors.zinc,

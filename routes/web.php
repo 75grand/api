@@ -4,7 +4,9 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\MobileAuthController;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'home');
+Route::view('/', 'home')->name('home');
+Route::view('/privacy', 'privacy', headers: ['Content-Type' => 'text/plain'])->name('privacy');
+Route::view('/terms', 'terms', headers: ['Content-Type' => 'text/plain'])->name('terms');
 
 Route::get('/auth/callback', [MobileAuthController::class, 'callback'])->name('auth.callback');
 

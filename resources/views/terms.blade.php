@@ -1,0 +1,2 @@
+no shirt
+no shoes
