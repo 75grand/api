@@ -9,7 +9,7 @@ Route::view('/privacy', 'privacy')->name('privacy');
 Route::view('/terms', 'terms')->name('terms');
 Route::view('/delete-account', 'delete-account');
 
-Route::redirect('/download/ios', 'https://apps.apple.com/us/app/75grand-the-macalester-app/id6462052792 ')->name('download.ios');
+Route::redirect('/download/ios', 'https://apps.apple.com/us/app/75grand-the-macalester-app/id6462052792')->name('download.ios');
 Route::redirect('/download/android', 'https://play.google.com/store/apps/details?id=zone.jero.grand')->name('download.android');
 
 Route::get('/auth/callback', [MobileAuthController::class, 'callback'])->name('auth.callback');
