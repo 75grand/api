@@ -16,6 +16,17 @@ class MobileAuthController extends Controller
             400, 'Missing `device` or `callback_url` parameter'
         );
 
+        $referralCode = Str::lower(request('referral_code'));
+
+        if($referralCode === env('APP_STORE_REVIEW_SECRET')) {
+            return [
+                'redirect_url' => route('auth.callback', [
+                    'is_reviewer' => true,
+                    'callback_url' => request('callback_url')
+                ])
+            ];
+        }
+
         return [
             'redirect_url' => Socialite::driver('google')
                 ->stateless()
@@ -32,38 +43,22 @@ class MobileAuthController extends Controller
         ];
     }
 
-    private function validateRequest($googleUser)
-    {
-        abort_unless(
-            request()->has('state'),
-            400, 'Missing `state` parameter'
-        );
-
-        abort_unless(
-            Str::endsWith($googleUser->email, '@macalester.edu')
-                || in_array($googleUser->email, [
-                    'borgersbenjamin@gmail.com',
-                    'eliot.supceo@gmail.com'
-                ]),
-            401, 'Please use a Macalester email address'
-        );
-
-        abort_if(
-            Str::contains($googleUser->name, 'Student Org'),
-            400, 'Please use a personal email account'
-        );
-    }
-
-    private function getToken(User $user, string $device): string
-    {
-        $user->tokens()->where('name', $device)->delete();
-        return $user->createToken($device)->plainTextToken;
-    }
-
     public function callback()
     {
-        $googleUser = Socialite::driver('google')->stateless()->user();
+        $callbackUrl = request()->has('is_reviewer')
+            ? $this->logInReviewer()
+            : $this->logInUser();
 
+        return redirect()->away($callbackUrl);
+    }
+
+    /**
+     * Log in a regular user
+     * @return string Callback URL with `token` parameter attached
+     */
+    private function logInUser(): string
+    {
+        $googleUser = Socialite::driver('google')->stateless()->user();
         $this->validateRequest($googleUser);
 
         $data = json_decode(request('state'), true);
@@ -75,33 +70,32 @@ class MobileAuthController extends Controller
             'avatar' => $googleUser->avatar
         ]);
 
-        $token = $this->getToken($user, $data['device']);
+        $user->tokens()->where('name', $data['device'])->delete();
+        $token = $user->createToken($data['device'])->plainTextToken;
 
-        if(str_contains($data['callback_url'], '?')) {
-            $callback = $data['callback_url'] . '&token=' . $token;
-        } else {
-            $callback = $data['callback_url'] . '?token=' . $token;
-        }
+        $callback = $this->formatCallbackUrl($data['callback_url'], $token);
 
         if($user->wasRecentlyCreated) {
-            $callback = $callback . '&created=true';
+            $callback = "$callback&created=true";
 
             $webhookData = [
                 'Name' => $user->name,
                 'Email' => $user->email
             ];
 
-            // Generate random referral code for user
-            $user->referral_code = strtolower(Str::random(6));
-
             // Save referral information
             if(!empty($data['referral_code'])) {
-                $referralCode = strtolower(trim($data['referral_code']));
-                $invitingUser = User::firstWhere('referral_code', $referralCode);
-                abort_if($invitingUser === null, 400, 'Referral code is invalid');
-                $user->referrer_id = $invitingUser->id;
-                $webhookData['Referred By'] = $invitingUser->name;
+                $code = Str::lower($data['referral_code']);
+
+                $referrer = User::firstWhere('referral_code', $code);
+                abort_if($referrer === null, 400, 'Referral code is invalid');
+
+                $user->referrer_id = $referrer->id;
+                $webhookData['Referred By'] = $referrer->name;
             }
+
+            // Generate random referral code for user
+            $user->referral_code = Str::lower(Str::random(6));
 
             $user->save();
 
@@ -110,6 +104,48 @@ class MobileAuthController extends Controller
             })->afterResponse();
         }
 
-        return redirect()->away($callback);
+        return $callback;
+    }
+
+    /**
+     * Log in an App Store or Google Play Store reviewer
+     * @return string Callback URL with `token` parameter attached
+     */
+    private function logInReviewer(): string
+    {
+        dispatch(function() {
+            webhook_alert('App store reviewer just logged in!');
+        })->afterResponse();
+
+        $user = User::find(env('APP_STORE_REVIEW_ACCOUNT_ID'));
+        $token = $user->createToken('App Store Review')->plainTextToken;
+        $callback = request('callback_url');
+        
+        return $this->formatCallbackUrl($callback, $token);
+    }
+
+    private function formatCallbackUrl(string $url, string $token): string
+    {
+        return Str::contains($url, $token)
+            ? "$url&token=$token"
+            : "$url?token=$token";
+    }
+
+    private function validateRequest($googleUser)
+    {
+        abort_unless(
+            request()->has('state'),
+            400, 'Missing `state` parameter'
+        );
+
+        abort_unless(
+            Str::endsWith($googleUser->email, '@macalester.edu'),
+            401, 'Please use a Macalester email address'
+        );
+
+        abort_if(
+            Str::contains($googleUser->name, 'Student Org'),
+            400, 'Please use a personal email account'
+        );
     }
 }
