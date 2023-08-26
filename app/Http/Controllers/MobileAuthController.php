@@ -126,7 +126,7 @@ class MobileAuthController extends Controller
 
     private function formatCallbackUrl(string $url, string $token): string
     {
-        return Str::contains($url, $token)
+        return Str::contains($url, '?')
             ? "$url&token=$token"
             : "$url?token=$token";
     }
