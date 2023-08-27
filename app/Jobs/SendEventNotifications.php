@@ -6,6 +6,7 @@ use App\Models\CalendarEvent;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -20,11 +21,18 @@ class SendEventNotifications implements ShouldQueue
      */
     public function handle(): void
     {
-        $from = now()->roundMinute();
-        $to = $from->copy()->addMinutes(15);
-
         $events = CalendarEvent::query()
-            ->whereBetween('start_date', [$from, $to])
+            ->where(
+                fn(Builder $query) => $query
+                    ->whereBetween('start_date', [
+                        now()->roundMinute(),
+                        now()->roundMinute()->addMinute()
+                    ])
+                    ->orWhereBetween('start_date', [
+                        now()->roundMinute()->addMinutes(15),
+                        now()->roundMinute()->addMinutes(15+1)
+                    ])
+            )
             ->whereHas('users')
             ->with('users')
             ->get();
