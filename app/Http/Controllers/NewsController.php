@@ -93,7 +93,7 @@ class NewsController extends Controller
             'title' => strip_tags(html_entity_decode($article['title'])),
             'date' => Carbon::create(...$article['publishDate']),
             'image_url' => "https://image.isu.pub/{$article['documentId']}/jpg/page_1_thumb_large.jpg",
-            'url' => 'https://issuu.com/' . $article['uri']
+            'url' => "https://issuu.com/{$article['uri']}/1?ff"
         ]);
     }
 
