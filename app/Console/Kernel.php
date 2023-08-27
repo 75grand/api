@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Jobs\RefreshCalendars;
 use App\Jobs\RefreshCourseData;
 use App\Jobs\ResetMoodleIntegration;
+use App\Jobs\SendEventNotifications;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -20,6 +21,8 @@ class Kernel extends ConsoleKernel
     {
         $schedule->job(new RefreshCalendars)->hourlyAt(30)->sentryMonitor('refresh-calendars');
         $schedule->job(new RefreshCourseData)->dailyAt('4:00')->sentryMonitor('refresh-course-data');
+
+        $schedule->job(new SendEventNotifications)->everyMinute()->sentryMonitor('send-event-notifications');
         
         $schedule->job(new ResetMoodleIntegration)->yearlyOn(1, 1, '0:0');
         $schedule->job(new ResetMoodleIntegration)->yearlyOn(6, 1, '0:0');
