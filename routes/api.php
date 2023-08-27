@@ -33,7 +33,8 @@ Route::post('feedback', [FeedbackController::class, 'store']);
 Route::get('hours', HoursController::class);
 
 // News
-Route::get('news/{source}', NewsController::class)->whereIn('source', array_column(NewsSource::cases(), 'value'));
+Route::get('news/{source}', NewsController::class)
+    ->whereIn('source', array_column(NewsSource::cases(), 'value'));
 
 // Calendar Events
 Route::get('events', [CalendarEventController::class, 'index']);
