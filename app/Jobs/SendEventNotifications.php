@@ -26,11 +26,11 @@ class SendEventNotifications implements ShouldQueue
                 fn(Builder $query) => $query
                     ->whereBetween('start_date', [
                         now()->roundMinute(),
-                        now()->roundMinute()->addMinute()
+                        now()->roundMinute()->addMinute()->subMicro()
                     ])
                     ->orWhereBetween('start_date', [
                         now()->roundMinute()->addMinutes(15),
-                        now()->roundMinute()->addMinutes(15+1)
+                        now()->roundMinute()->addMinutes(15+1)->subMicro()
                     ])
             )
             ->whereHas('users')
