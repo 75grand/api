@@ -2,38 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\NewsSource;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 
-enum NewsSource: string {
-    case THE_MAC_WEEKLY = 'the-mac-weekly';
-    case MACALESTER = 'macalester';
-    case THE_HEGEMONOCLE = 'the-hegemonocle';
-    case SUMMIT = 'summit';
-    case REDDIT = 'reddit';
-
-    public function getUrl(): string
-    {
-        return match($this) {
-            NewsSource::MACALESTER => 'https://www.macalester.edu/news/wp-json/wp/v2/posts?per_page=5&_embed=wp:featuredmedia&_fields=date,link,title,rendered,_embedded,_links',
-            NewsSource::THE_MAC_WEEKLY =>    'https://themacweekly.com/wp-json/wp/v2/posts?per_page=5&_embed=wp:featuredmedia&_fields=date,link,title,rendered,_embedded,_links&categories=5271',
-            NewsSource::THE_HEGEMONOCLE => 'https://issuu.com/call/profile/v1/documents/hegemonocle?limit=9',
-            NewsSource::SUMMIT => 'https://www.macalestersummit.com/posts.json',
-            NewsSource::REDDIT => 'https://api.reddit.com/r/macalester.json?limit=5'
-        };
-    }
-}
-
 class NewsController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function __invoke(string $source): Collection
+    public function index()
+    {
+        $sources = [];
+
+        foreach(NewsSource::cases() as $source) {
+            $sources[$source->value] = [
+                'name' => $source->getName(),
+                'website' => $source->getWebsite(),
+                'items' => $this->show($source->value)
+            ];
+        }
+
+        return $sources;
+    }
+
+    public function show(string $source): Collection
     {
         return cache()->remember("news-$source", now()->addHour(), function() use ($source) {
             $source = NewsSource::from($source);

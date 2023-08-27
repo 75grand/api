@@ -8,11 +8,11 @@ use App\Http\Controllers\HoursController;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\NewsController;
-use App\Http\Controllers\NewsSource;
 use App\Http\Controllers\ListingController;
 use App\Http\Controllers\MoodleController;
 use App\Http\Controllers\TransitController;
 use App\Http\Controllers\UserController;
+use App\Support\NewsSource;
 use Illuminate\Support\Facades\Route;
 
 // API Health Check
@@ -33,7 +33,8 @@ Route::post('feedback', [FeedbackController::class, 'store']);
 Route::get('hours', HoursController::class);
 
 // News
-Route::get('news/{source}', NewsController::class)
+Route::get('news', [NewsController::class, 'index']);
+Route::get('news/{source}', [NewsController::class, 'show'])
     ->whereIn('source', array_column(NewsSource::cases(), 'value'));
 
 // Calendar Events
