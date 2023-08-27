@@ -18,7 +18,7 @@ enum NewsSource: string {
         return match($this) {
             NewsSource::MACALESTER => 'https://www.macalester.edu/news/wp-json/wp/v2/posts?per_page=5&_embed=wp:featuredmedia&_fields=date,link,title,rendered,_embedded,_links&categories=7',
             NewsSource::THE_MAC_WEEKLY =>    'https://themacweekly.com/wp-json/wp/v2/posts?per_page=5&_embed=wp:featuredmedia&_fields=date,link,title,rendered,_embedded,_links&categories=5271',
-            NewsSource::THE_HEGEMONOCLE => 'https://issuu.com/call/profile/v1/documents/hegemonocle?limit=8',
+            NewsSource::THE_HEGEMONOCLE => 'https://issuu.com/call/profile/v1/documents/hegemonocle?limit=9',
             NewsSource::SUMMIT => 'https://www.macalestersummit.com/posts.json',
             NewsSource::REDDIT => 'https://api.reddit.com/r/macalester.json?limit=5'
         };
