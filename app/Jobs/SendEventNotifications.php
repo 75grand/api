@@ -40,6 +40,8 @@ class SendEventNotifications implements ShouldQueue
                 $event->location ? " at {$event->location}" : ''
             );
 
+            // I decided not to use Laravel's notification system because it
+            // doesn't support sending multiple tokens per rquest to Expo
             Http::withToken(env('EXPO_ACCESS_TOKEN'))
                 ->post('https://exp.host/--/api/v2/push/send', [
                     'to' => $tokens,
