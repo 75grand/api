@@ -103,6 +103,6 @@ class NewsController extends Controller
             'date' => date_create($article['date'])->format('c'),
             'image_url' => $article['image'],
             'url' => $article['link']
-        ]);
+        ])->take(5);
     }
 }
