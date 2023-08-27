@@ -20,7 +20,7 @@ enum NewsSource: string {
             NewsSource::THE_MAC_WEEKLY =>    'https://themacweekly.com/wp-json/wp/v2/posts?per_page=5&_embed=wp:featuredmedia&_fields=date,link,title,rendered,_embedded,_links&categories=5271',
             NewsSource::THE_HEGEMONOCLE => 'https://issuu.com/call/profile/v1/documents/hegemonocle?limit=8',
             NewsSource::SUMMIT => 'https://www.macalestersummit.com/posts.json',
-            NewsSource::REDDIT => 'https://www.reddit.com/r/macalester.json'
+            NewsSource::REDDIT => 'https://api.reddit.com/r/macalester.json?limit=5'
         };
     }
 }
@@ -56,13 +56,14 @@ class NewsController extends Controller
             $data = $post['data'];
 
             return [
-                'title' => $data['title'],
+                'title' => deep_clean_string($data['title']),
                 'date' => Carbon::createFromTimestamp($data['created']),
                 'image_url' => null,
                 'url' => $data['url'],
                 'author' => $data['author'],
                 'comments' => $data['num_comments'],
-                'score' => $data['score']
+                'score' => $data['score'],
+                'stickied' => $data['stickied']
             ];
         });
     }
