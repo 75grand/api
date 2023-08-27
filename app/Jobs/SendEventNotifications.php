@@ -45,7 +45,7 @@ class SendEventNotifications implements ShouldQueue
             $body = sprintf(
                 'Starting %s%s',
                 $minsUntil > 1 ? "in $minsUntil minutes" : 'now',
-                $event->location ? " at {$event->location}" : ''
+                $event->location ? " ({$event->location})" : ''
             );
 
             // I decided not to use Laravel's notification system because it
