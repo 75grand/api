@@ -33,6 +33,7 @@ class RefreshCalendar implements ShouldQueue
 
         /** @var \ICal\Event[] */
         $events = $calendar->eventsFromInterval('3 months');
+        $timeZone = $calendar->calendarTimeZone();
 
         foreach($events as $event) {
             $savedEvent = CalendarEvent::updateOrCreate([
@@ -41,8 +42,8 @@ class RefreshCalendar implements ShouldQueue
                 'title' => $this->clean($event->summary),
                 'description' => $this->clean($event->description),
                 'location' => $this->clean($event->location),
-                'start_date' => Carbon::parse($event->dtstart),
-                'end_date' => Carbon::parse($event->dtend),
+                'start_date' => Carbon::parse($event->dtstart, $timeZone)->format('c'),
+                'end_date' => Carbon::parse($event->dtend, $timeZone)->format('c'),
                 'calendar_name' => $this->calendarName,
                 'url' => $this->clean($event->url)
             ]);

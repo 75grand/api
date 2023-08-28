@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use ICal\ICal;
 use Illuminate\Http\Request;
 
@@ -31,6 +32,8 @@ class HoursController extends Controller
                     'httpUserAgent' => 'api@75grand.net'
                 ]);
 
+                $timeZone = $calendar->calendarTimeZone();
+
                 $events = $calendar->eventsFromInterval('1 week');
     
                 $result = [];
@@ -42,9 +45,9 @@ class HoursController extends Controller
     
                     $result[$name]['events'][] = [
                         'text_before_start' => @$customTexts[0] ?: 'opens',
-                        'start_date' => date_create($event->dtstart)->format('c'),
+                        'start_date' => Carbon::parse($event->dtstart, $timeZone)->format('c'),
                         'text_before_end' => @$customTexts[1] ?: 'closes',
-                        'end_date' => date_create($event->dtend)->format('c')
+                        'end_date' => Carbon::parse($event->dtend, $timeZone)->format('c')
                     ];
                 }
     

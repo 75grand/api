@@ -34,12 +34,13 @@ class MoodleController extends Controller
 
             $cal = new ICal(options: ['initString' => $data]);
             $events = $cal->events();
+            $timeZone = $cal->calendarTimeZone();
 
-            return collect($events)->map(function(ICalEvent $event) {
+            return collect($events)->map(function(ICalEvent $event) use ($timeZone) {
                 return [
                     'id' => explode('@', $event->uid)[0],
                     'title' => Str::replaceLast(' is due', '', $event->summary),
-                    'due' => Carbon::parse($event->dtstart)->format('c'),
+                    'due' => Carbon::parse($event->dtstart, $timeZone)->format('c'),
                     'class' => self::formatClass($event->categories)
                 ];
             })->toArray();
