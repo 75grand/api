@@ -29,7 +29,7 @@ class MoodleController extends Controller
                     'moodle_token' => null
                 ]);
 
-                return false;
+                return null;
             }
 
             $cal = new ICal(options: ['initString' => $data]);
@@ -43,7 +43,7 @@ class MoodleController extends Controller
                     'class' => self::formatClass($event->categories)
                 ];
             })->toArray();
-        }) ?: abort(400);
+        }) ?? abort(400);
     }
 
     private static function formatClass(string $class): string
