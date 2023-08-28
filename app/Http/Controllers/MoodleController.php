@@ -17,27 +17,6 @@ class MoodleController extends Controller
      */
     public function index(Request $request)
     {
-        return [
-            [
-                'id' => '0',
-                'title' => 'Project Code Submission',
-                'due' => now()->addHours(16)->format('c'),
-                'class' => 'COMP 128'
-            ],
-            [
-                'id' => '1',
-                'title' => 'HW 11',
-                'due' => now()->subDays(1)->format('c'),
-                'class' => 'MATH 279'
-            ],
-            [
-                'id' => '2',
-                'title' => 'Presentation Slides',
-                'due' => now()->addHours(16)->format('c'),
-                'class' => 'COMP 128'
-            ]
-        ];
-
         $url = $request->user()->moodle_url;
         abort_if($url === null, 400);
 
