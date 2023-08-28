@@ -42,7 +42,7 @@ class RefreshCalendar implements ShouldQueue
                 'description' => $this->clean($event->description),
                 'location' => $this->clean($event->location),
                 'start_date' => Carbon::parse($event->dtstart),
-                'end_date' => Carbon::parse($event->dtstart),
+                'end_date' => Carbon::parse($event->dtend),
                 'calendar_name' => $this->calendarName,
                 'url' => $this->clean($event->url)
             ]);
