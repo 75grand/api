@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
 
 if(!function_exists('title_case')) {
     function title_case(string $text): string {
