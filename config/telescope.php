@@ -92,7 +92,8 @@ return [
     */
 
     'only_paths' => [
-        'api/*'
+        'api/*',
+        'auth/*'
     ],
 
     'ignore_paths' => [
