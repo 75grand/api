@@ -1,4 +1,4 @@
-<x-html title="Event: {{ $event->title }} — 75grand" image="{{ $event->image_url }}">
+<x-html title="Event: “{{ $event->title }}” — 75grand" image="{{ $event->image_url }}">
     <main class="sm:p-16 p-8 max-w-screen-sm mx-auto space-y-8">
         <a draggable="false" class="px-8 block w-fit active:scale-95 transition-transform" href="{{ route('home') }}">
             <img draggable="false" width="512" height="121.441" class="w-32" src="{{ url('/assets/logo.svg') }}" alt="">
