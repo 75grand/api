@@ -11,6 +11,7 @@
 
     <title>{{ $title }}</title>
     <meta name="apple-itunes-app" content="app-id=6462052792">
+    <meta name="theme-color" content="#0369a1">
 </head>
 
 <body class="antialiased">
