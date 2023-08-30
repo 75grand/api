@@ -9,11 +9,10 @@ class DownloadController extends Controller
 {
     public function automatic()
     {
-        return match(true) {
-            Str::contains(request()->userAgent(), 'Android') => $this->android(),
-            Str::contains(request()->userAgent(), ['iPad', 'iPhone']) => $this->ios(),
-            default => redirect()->route('home')
-        };
+        $userAgent = request()->userAgent();
+        if(Str::contains($userAgent, 'Android')) return $this->android();
+        if(Str::contains($userAgent, ['iPad', 'iPhone'])) return $this->ios();
+        return redirect()->route('home');
     }
 
     public function ios()
