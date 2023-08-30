@@ -53,7 +53,7 @@
             @endif
 
             <div class="flex gap-2 max-sm:flex-col text-sm">
-                <x-button style="accent" href="{{ route('home') }}">
+                <x-button style="accent" href="{{ route('download') }}">
                     Download 75grand
                 </x-button>
 
