@@ -6,12 +6,12 @@
 
         <div>
             @if($event->image_url && $event->calendar_name !== 'Sports')
-                <div class="h-64">
+                <div class="h-64 -mb-12">
                     <img class="rounded-xl object-cover w-full h-full" src="{{ $event->image_url }}" alt="">
                 </div>
             @endif
     
-            <div class="w-24 h-24 text-center flex flex-col leading-none -mt-12 mx-8 shadow-xl rounded-xl">
+            <div class="w-24 h-24 text-center flex flex-col leading-none mx-8 shadow-xl rounded-xl">
                 <div class="bg-accent text-white uppercase text-ms p-2 rounded-t-xl">
                     {{ $event->start_date->format('M') }}
                 </div>
