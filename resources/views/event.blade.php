@@ -53,11 +53,13 @@
             @endif
 
             <div class="flex gap-2 max-sm:flex-col text-sm">
-                <a class="bg-accent text-white py-2 px-5 rounded-xl font-semibold block w-fit active:scale-95 transition-transform"
-                    href="{{ route('home') }}">Download 75grand</a>
-    
-                <a class="bg-gray-200 py-2 px-5 rounded-xl font-semibold block w-fit active:scale-95 transition-transform"
-                    href="grand://calendar/{{ $event->id }}">Open in 75grand</a>
+                <x-button style="accent" href="{{ route('home') }}">
+                    Download 75grand
+                </x-button>
+
+                <x-button href="grand://calendar/{{ $event->id }}">
+                    Open in 75grand
+                </x-button>
             </div>
         </div>
     </main>
