@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\CalendarEventController;
+use App\Http\Controllers\ListingController;
 use App\Http\Controllers\MobileAuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -12,6 +14,9 @@ Route::view('/support', 'support');
 
 Route::redirect('/download/ios', 'https://apps.apple.com/us/app/75grand-the-macalester-app/id6462052792')->name('download.ios');
 Route::redirect('/download/android', 'https://play.google.com/store/apps/details?id=zone.jero.grand')->name('download.android');
+
+Route::get('/marketplace/{listing}', [ListingController::class, 'page']);
+Route::get('/calendar/{event}', [CalendarEventController::class, 'page']);
 
 Route::get('/auth/callback', [MobileAuthController::class, 'callback'])->name('auth.callback');
 

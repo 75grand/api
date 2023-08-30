@@ -30,4 +30,12 @@ class CalendarEventController extends Controller
         $event->loadCount('users');
         return new CalendarEventResource($event);
     }
+
+    /**
+     * Display a basic page with the resource.
+     */
+    public function page(CalendarEvent $event)
+    {
+        return view('event', ['event' => $event]);
+    }
 }

@@ -22,4 +22,19 @@ class CalendarEvent extends Model
     {
         return $this->belongsToMany(User::class);
     }
+
+    public function formatDuration(): string
+    {
+        $startDate = $this->start_date->setTimezone('America/Chicago');
+        $endDate = $this->end_date->setTimezone('America/Chicago');
+
+        $diff = $endDate->diffInHours($startDate);
+        if($diff === 24) return 'All Day';
+
+        $startDateString = $startDate->format('g:i A');
+        if($diff === 0) return $startDateString;
+
+        $endDateString = $endDate->format('g:i A');
+        return $startDateString . ' – ' . $endDateString;
+    }
 }

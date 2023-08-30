@@ -59,6 +59,14 @@ class ListingController extends Controller
     }
 
     /**
+     * Display a basic page with the resource.
+     */
+    public function page(Listing $listing)
+    {
+        return view('listing', ['listing' => $listing]);
+    }
+
+    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Listing $listing)
