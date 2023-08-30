@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        <div class="px-8 space-y-4">
+        <div class="px-8 space-y-8">
             <h1 class="text-2xl font-semibold">{{ $event->title }}</h1>
 
             <div>
@@ -36,6 +36,16 @@
                     <p>{{ $event->location }}</p>
                 </div>
             @endif
+
+            @if($event->url)
+                <div class="space-y-1">
+                    <h3 class="uppercase text-sm text-gray-500">Website</h3>
+
+                    <a href="{{ $event->url }}" class="font-semibold text-accent hover:underline">
+                        {{ parse_url($event->url, PHP_URL_HOST) }}
+                    </a>
+                </div>
+            @endif
     
             @if($event->description)
                 <div class="space-y-1">
@@ -47,7 +57,7 @@
                 </div>
             @endif
 
-            <div class="flex gap-2 max-sm:flex-col">
+            <div class="flex gap-2 max-sm:flex-col text-sm">
                 <a class="bg-accent text-white py-2 px-5 rounded-xl font-semibold block w-fit active:scale-95 transition-transform"
                     href="{{ route('home') }}">Download 75grand</a>
     
