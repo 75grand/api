@@ -31,30 +31,25 @@
             </div>
     
             @if($event->location)
-                <div class="space-y-1">
-                    <h3 class="uppercase text-sm text-gray-500">Location</h3>
+                <x-metadata label="Location">
                     <p>{{ $event->location }}</p>
-                </div>
+                </x-metadata>
             @endif
 
             @if($event->url)
-                <div class="space-y-1">
-                    <h3 class="uppercase text-sm text-gray-500">Website</h3>
-
+                <x-metadata label="Website">
                     <a href="{{ $event->url }}" class="font-semibold text-accent hover:underline">
                         {{ parse_url($event->url, PHP_URL_HOST) }}
                     </a>
-                </div>
+                </x-metadata>
             @endif
     
             @if($event->description)
-                <div class="space-y-1">
-                    <h3 class="uppercase text-sm text-gray-500">Description</h3>
-
+                <x-metadata label="Description">
                     <x-prose>
                         {{ $event->description }}
                     </x-prose>
-                </div>
+                </x-metadata>
             @endif
 
             <div class="flex gap-2 max-sm:flex-col text-sm">
