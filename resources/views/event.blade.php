@@ -7,7 +7,8 @@
         <div>
             @if($event->image_url && $event->calendar_name !== 'Sports')
                 <div class="h-64 -mb-12">
-                    <img class="rounded-xl object-cover w-full h-full" src="{{ $event->image_url }}" alt="">
+                    <img class="rounded-xl object-cover w-full h-full bg-gray-300"
+                        src="{{ $event->image_url }}" alt="">
                 </div>
             @endif
     

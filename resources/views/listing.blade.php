@@ -4,7 +4,8 @@
             <img draggable="false" width="512" height="121.441" class="w-32" src="{{ url('/assets/logo.svg') }}" alt="">
         </a>
 
-        <img class="rounded-xl w-full aspect-square object-cover" src="{{ image_cdn_url($listing->image_url, 750, 750) }}" alt="">
+        <img class="rounded-xl w-full aspect-square object-cover bg-gray-300"
+            src="{{ image_cdn_url($listing->image_url, 750, 750) }}" alt="">
 
         <div class="px-8 space-y-8">
             <h1 class="text-2xl font-semibold">{{ $listing->title }}</h1>
