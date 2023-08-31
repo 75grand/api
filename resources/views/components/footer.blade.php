@@ -19,5 +19,5 @@
         <a class="text-accent hover:underline font-semibold" href="{{ route('terms') }}">Terms of Service</a>
     </p>
 
-    <p class="text-gray-500">75grand is not affiliated with Macalester College.</p>
+    <p class="text-gray-500">75grand is not affiliated with Macalester College</p>
 </footer>
