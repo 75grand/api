@@ -17,9 +17,8 @@
         </div>
 
         <div class="flex gap-4">
-            <x-email-form/>
-            {{-- <x-app-store-badge platform="ios"/> --}}
-            {{-- <x-app-store-badge platform="android"/> --}}
+            <x-app-store-badge platform="ios"/>
+            <x-app-store-badge platform="android"/>
         </div>
 
         <div class="max-w-md w-full">

@@ -14,8 +14,8 @@ Route::view('/delete-account', 'delete-account');
 Route::view('/support', 'support');
 
 Route::get('/download', [DownloadController::class, 'automatic'])->name('download');
-Route::redirect('/download/ios', [DownloadController::class, 'ios'])->name('download.ios');
-Route::redirect('/download/android', [DownloadController::class, 'android'])->name('download.android');
+Route::get('/download/ios', [DownloadController::class, 'ios'])->name('download.ios');
+Route::get('/download/android', [DownloadController::class, 'android'])->name('download.android');
 
 Route::get('/marketplace/{listing}', [ListingController::class, 'page']);
 Route::get('/calendar/{event}', [CalendarEventController::class, 'page']);
