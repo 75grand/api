@@ -34,8 +34,10 @@
     
                     @if($listing->user->position === 'student' && $listing->user->class_year)
                         <p class="text-gray-500">Class of {{ $listing->user->class_year }}</p>
-                    @else
+                    @elseif($listing->user->position)
                         <p class="text-gray-500">{{ Str::ucfirst($listing->user->position) }}</p>
+                    @else
+                        <p class="text-gray-500">Macalester community member</p>
                     @endif
                 </div>
             </div>
