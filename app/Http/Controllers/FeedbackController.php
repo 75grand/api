@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -31,11 +32,13 @@ class FeedbackController extends Controller
                         if($user) $message->replyTo($user->email);
                     }
                 );
-            } finally {
+            } catch(Exception $error) {
                 webhook_alert('New feedback', [
                     'Email' => $data['email'] ?? '(no email provided)',
                     'Message' => $data['message']
                 ]);
+
+                throw $error;
             }
         })->afterResponse();
     }
