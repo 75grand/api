@@ -100,7 +100,7 @@ class MobileAuthController extends Controller
             $user->save();
 
             dispatch(function() use ($user, $webhookData) {
-                webhook_alert('New User', $webhookData, $user->avatar);
+                webhook_alert("New User: $user->name", $webhookData, $user->avatar);
             })->afterResponse();
         }
 
