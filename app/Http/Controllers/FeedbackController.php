@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class FeedbackController extends Controller
 {
@@ -17,10 +20,24 @@ class FeedbackController extends Controller
         ]);
 
         dispatch(function() use ($data) {
-            webhook_alert('New feedback', [
-                'Email' => $data['email'] ?? '(no email provided)',
-                'Message' => $data['message']
-            ]);
+            try {
+                Mail::raw(
+                    $data['message'],
+                    function($message) use ($data) {
+                        $user = User::where('email', $data['email']);
+                        $subject = '[75grand] Feedback from ' . ($user->name ?? 'User');
+                        
+                        $message->to('jpaulos@macalester.edu');
+                        $message->subject($subject);
+                        if($user) $message->replyTo($user->email);
+                    }
+                );
+            } catch(Exception) {
+                webhook_alert('New feedback', [
+                    'Email' => $data['email'] ?? '(no email provided)',
+                    'Message' => $data['message']
+                ]);
+            }
         })->afterResponse();
     }
 }
