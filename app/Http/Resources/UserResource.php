@@ -27,7 +27,8 @@ class UserResource extends JsonResource
             'moodle_enabled' => $this->moodle_url !== null,
             $this->mergeWhen($sameUser, [
                 'referral_code' => $this->referral_code,
-                'referrals_count' => $this->whenCounted('referrals'),
+                'referrals_count' => $this->whenCounted('referrals',
+                    fn($count) => $count - $this->referrals_redeemed),
                 'referrals_per_prize' => 5,
                 'created_at' => $this->created_at
             ])
