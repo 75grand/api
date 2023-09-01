@@ -22,7 +22,6 @@ class DownloadController extends Controller
 
     public function android()
     {
-        // return redirect('https://play.google.com/store/apps/details?id=zone.jero.grand');
-        return redirect('https://eepurl.com/ic-0qz');
+        return redirect('https://play.google.com/store/apps/details?id=zone.jero.grand');
     }
 }
