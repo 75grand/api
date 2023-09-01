@@ -24,7 +24,7 @@ class FeedbackController extends Controller
                 Mail::raw(
                     $data['message'],
                     function($message) use ($data) {
-                        $user = User::where('email', $data['email']);
+                        $user = User::firstWhere('email', $data['email']);
                         $subject = '[75grand] Feedback from ' . ($user->name ?? 'User');
                         
                         $message->to('jpaulos@macalester.edu');
