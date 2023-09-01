@@ -45,6 +45,16 @@ class ListingController extends Controller
         unset($data['image']);
 
         $model = $request->user()->listings()->create($data);
+
+        dispatch(function() use ($model, $data) {
+            webhook_alert('New Marketplace Listing', [
+                'Title' => $data['title'],
+                'User' => $model->name,
+                'Description' => $data['description'],
+                'Price' => '$' . number_format($data['price'])
+            ], $data['image_url']);
+        })->afterResponse();
+
         $model = $model->load('user');
         return new ListingResource($model);
     }
