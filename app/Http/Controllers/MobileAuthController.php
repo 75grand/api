@@ -80,7 +80,8 @@ class MobileAuthController extends Controller
 
             $webhookData = [
                 'Name' => $user->name,
-                'Email' => $user->email
+                'Email' => $user->email,
+                'Device' => $data['device']
             ];
 
             // Save referral information
