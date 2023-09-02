@@ -52,12 +52,11 @@ class MoodleController extends Controller
         // Match a separated group of three numbers
         $number = Str::match('/(?:\D|^)(\d{3})(?:\D|$)/i', $class);
         if(!$number) return $class;
-        $number = $number[1];
 
         // Match a separated group of four letters
         $department = Str::match('/(?:[^a-z]|^)([a-z]{4})(?:[^a-z]|$)/i', $class);
         if(!$department) return $class;
-        $department = Str::upper($department[1]);
+        $department = Str::upper($department);
 
         return "$department $number";
     }
