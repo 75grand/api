@@ -32,7 +32,9 @@ class MoodleController extends Controller
                 return null;
             }
 
-            $cal = (new ICal)->initString($data);
+            $cal = new ICal(options: ['filterDaysAfter' => 14]);
+            $cal->initString($data);
+
             $events = $cal->events();
             $timeZone = $cal->calendarTimeZone();
 
