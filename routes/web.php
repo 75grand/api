@@ -5,6 +5,7 @@ use App\Http\Controllers\CalendarEventController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\ListingController;
 use App\Http\Controllers\MobileAuthController;
+use App\Http\Controllers\WidgetController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'home')->name('home');
@@ -30,3 +31,5 @@ Route::redirect('/redirect/library-catalog', 'https://macalester.on.worldcat.org
 Route::redirect('/redirect/print', 'https://macalester.us.uniflowonline.com/#StartPrinting');
 Route::redirect('/redirect/moodle', 'https://moodle.macalester.edu/login/index.php?authCAS=CAS');
 Route::redirect('/redirect/time-clock', 'https://cas.tcplusondemand.com/43341/App_Redirect/webclock.aspx');
+
+Route::get('/api/widget-data', WidgetController::class);
