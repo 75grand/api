@@ -16,7 +16,7 @@ class HoursController extends Controller
      */
     public function __invoke(Request $request)
     {
-        return cache()->remember(__METHOD__, now()->addHours(12), function() {
+        return cache()->remember(__METHOD__, now()->addMinutes(30), function() {
             $calendars = [
                 'https://calendar.google.com/calendar/ical/181235a736929aeeeff4459188a0ff4becaa3ca4bea67aeb82b1d2a15b179006%40group.calendar.google.com/public/basic.ics',
                 'https://calendar.google.com/calendar/ical/5a09b236bff5e9f6636548318d9c5abdc0a29fa5572a585ddba1b68db9a781df%40group.calendar.google.com/public/basic.ics'
