@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 if(!function_exists('title_case')) {
     function title_case(string $text): string {
@@ -31,7 +32,7 @@ if(!function_exists('title_case')) {
 if(!function_exists('image_cdn_url')) {
     function image_cdn_url(string $imageUrl, $width = 0, $height = 0, $quality = 80, $trim = 0): string {
         if( // Short-circuit if URL is relative or local
-            str_starts_with($imageUrl, '/') ||
+            Str::startsWith($imageUrl, '/') ||
             in_array(parse_url($imageUrl, PHP_URL_HOST), ['localhost', '127.0.0.1'])
         ) return $imageUrl;
     

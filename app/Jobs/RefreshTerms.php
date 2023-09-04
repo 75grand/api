@@ -10,6 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class RefreshTerms implements ShouldQueue
 {
@@ -28,7 +29,7 @@ class RefreshTerms implements ShouldQueue
             Term::updateOrCreate([
                 'code' => $term['code']
             ], [
-                'name' => str_replace(' (View Only)', '', $term['description'])
+                'name' => Str::replace(' (View Only)', '', $term['description'])
             ]);
         }
     }

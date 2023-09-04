@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
 
 class RefreshCalendar implements ShouldQueue
 {
@@ -51,7 +52,7 @@ class RefreshCalendar implements ShouldQueue
             $mightHaveData =
                 !$savedEvent->checked_for_data &&
                 $savedEvent->url &&
-                str_starts_with($savedEvent->url, 'https://www.macalester.edu/calendar/event/');
+                Str::startsWith($savedEvent->url, 'https://www.macalester.edu/calendar/event/');
 
             ScrapeCalendarEventData::dispatchIf($mightHaveData, $savedEvent);
         }

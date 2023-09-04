@@ -13,6 +13,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class RefreshCourseDescriptions implements ShouldQueue
 {
@@ -44,7 +45,7 @@ class RefreshCourseDescriptions implements ShouldQueue
 
             $this->term->courses()->where('crn', $matches[1])->update([
                 'description' => $course['CATALOG_TEXT_LONG'],
-                'attendance_required' => str_contains($html, 'First day attendance required')
+                'attendance_required' => Str::contains($html, 'First day attendance required')
             ]);
         }
     }

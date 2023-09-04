@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class AlertController extends Controller
 {
@@ -33,7 +34,7 @@ class AlertController extends Controller
             $xml = Http::get('https://www.getrave.com/rss/macalester/channel1')->body();
             $xml = simplexml_load_string($xml);
 
-            $text = str_replace([
+            $text = Str::replace([
                 'Macalester Urgent Alert: ',
                 ' www.macalester.edu/alert'
             ], '', $xml->channel->item->description);
