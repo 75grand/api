@@ -30,6 +30,6 @@ Route::redirect('/redirect/reserve', 'https://ems.macalester.edu');
 Route::redirect('/redirect/library-catalog', 'https://macalester.on.worldcat.org/discovery');
 Route::redirect('/redirect/print', 'https://macalester.us.uniflowonline.com/#StartPrinting');
 Route::redirect('/redirect/moodle', 'https://moodle.macalester.edu/login/index.php?authCAS=CAS');
-Route::redirect('/redirect/time-clock', 'https://cas.tcplusondemand.com/43341/App_Redirect/webclock.aspx');
+Route::redirect('/redirect/time-clock', 'https://43341.tcplusondemand.com/app/webclock/index.html#/EmployeeLogOn/43341');
 
 Route::get('/api/widget-data', WidgetController::class);
