@@ -26,6 +26,8 @@ class Kernel extends ConsoleKernel
         $schedule->job(new SendEventNotifications)->everyMinute()->sentryMonitor('send-event-notifications');
         $schedule->job(new SendStaleListingNotifications)->dailyAt('23:00' /* 6:00 PM CST */)->sentryMonitor('send-stale-notifications');
 
+        $schedule->command('app:refresh-moodle')->dailyAt('8:00');
+
         $schedule->job(new ResetMoodleIntegration)->yearlyOn(1, 1, '0:0');
         $schedule->job(new ResetMoodleIntegration)->yearlyOn(6, 1, '0:0');
 
