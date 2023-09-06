@@ -28,7 +28,7 @@ class HoursController extends Controller
                 $calendar = new ICal($calendarUrl, [
                     'defaultSpan' => 1,
                     'filterDaysAfter' => 20,
-                    'filterDaysBefore' => 1,
+                    'filterDaysBefore' => 2,
                     'httpUserAgent' => 'api@75grand.net'
                 ]);
 
