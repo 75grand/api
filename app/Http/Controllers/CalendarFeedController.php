@@ -16,13 +16,12 @@ class CalendarFeedController extends Controller
     public function __invoke(Request $request)
     {
         $user = $request->user();
-        
         $firstName = Str::before($user->name, ' ');
-        $title = "$firstName's Calendar";
 
         $calendar = Calendar::create()
-            ->name($title)
-            ->description('Your events saved from 75grand')
+            ->name('75grand')
+            ->description("$firstName's events saved from 75grand")
+            ->refreshInterval(15)
             ->timezone(Timezone::create('America/Chicago'));
 
         foreach($user->events as $event) {
