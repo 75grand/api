@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Support\Facades\DB;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Sanctum\Sanctum;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,6 +35,10 @@ class AppServiceProvider extends ServiceProvider
         Model::unguard();
 
         JsonResource::withoutWrapping();
+
+        Sanctum::getAccessTokenFromRequestUsing(
+            fn(Request $request) => $request->token ?? $request->bearerToken()
+        );
 
         // DB::listen(function($query) {
         //     Log::info(

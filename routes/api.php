@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CalendarEventController;
+use App\Http\Controllers\CalendarFeedController;
 use App\Http\Controllers\MobileAuthController;
 use App\Http\Controllers\EventAttendeeController;
 use App\Http\Controllers\FeedbackController;
@@ -44,6 +45,7 @@ Route::get('events/{event}', [CalendarEventController::class, 'show']);
 Route::middleware('auth:sanctum')->group(function() {
     Route::get('events/{event}/attendees', [EventAttendeeController::class, 'index']);
     Route::patch('events/{event}/attendees', [EventAttendeeController::class, 'update']);
+    Route::get('events.ics', CalendarFeedController::class);
 });
 
 // Public Transit
