@@ -72,11 +72,16 @@ if(!function_exists('webhook_alert')) {
 }
 
 if(!function_exists('deep_clean_string')) {
-    function deep_clean_string(string $string, bool $stripTags = false): string {
+    function deep_clean_string(?string $string, bool $stripTags = false): string {
+        if($string === null) return null;
+
         $string = html_entity_decode($string, ENT_QUOTES|ENT_HTML5, 'UTF-8');
         $string = html_entity_decode($string, ENT_QUOTES|ENT_HTML5, 'UTF-8');
+
+        if($stripTags) $string = strip_tags($string, 'br');
+        $string = Str::replace(['<br>', '<br/>', '<br />'], "\n", $string, true);
+
         $string = trim($string);
-        if($stripTags) $string = strip_tags($string);
         return $string;
     }
 }
