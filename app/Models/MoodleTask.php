@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class MoodleTask extends Model
 {
     use HasFactory;
-    
+
     protected $casts = [
-        'completed' => 'boolean',
-        'sent_created_notification' => 'boolean',
+        'due_date' => 'datetime',
+        'completed_at' => 'datetime'
     ];
 
     public function user()

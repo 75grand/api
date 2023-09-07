@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('class');
             $table->dateTime('due_date');
-            $table->boolean('completed')->default(false);
+            $table->dateTime('completed_at')->nullable();
 
             $table->timestamps();
         });
