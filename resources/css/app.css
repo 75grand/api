@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.swing-down-parent {
+    .swing-down-child {
+        transform: translateX(-50%) perspective(500px) rotateX(-90deg);
+        transform-origin: center top;
+        transition: transform 0.4s;
+    }
+
+    &:hover {
+        .swing-down-child {
+            transform: translateX(-50%) perspective(500px) rotateX(0deg);
+        }
+    }
+}

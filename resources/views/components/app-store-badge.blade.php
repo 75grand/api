@@ -1,4 +1,4 @@
-<div class="group relative">
+<div class="group relative swing-down-parent">
     @if($platform === 'ios')
         <a draggable="false" target="_blank" href="{{ route('download.ios') }}">
             <img draggable="false" class="h-12 active:scale-95 transition-transform" src="{{ url('/assets/app-store-badge.svg') }}" alt="">
@@ -10,10 +10,9 @@
     @endif
 
     <div class="
-        max-sm:hidden
-        opacity-0 group-hover:opacity-100 transition-opacity
+        max-sm:hidden swing-down-child
         pointer-events-none group-hover:pointer-events-auto
-        absolute z-50 left-1/2 -translate-x-1/2 pt-2
+        absolute z-50 left-1/2 pt-2
     ">
         <div class="bg-white p-2 border-2 rounded-lg shadow-md">
             @if($platform === 'ios')
