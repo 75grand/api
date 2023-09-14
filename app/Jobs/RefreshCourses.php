@@ -9,7 +9,6 @@ use App\Models\Subject;
 use App\Models\Term;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Http\Client\PendingRequest;
@@ -27,7 +26,8 @@ class RefreshCourses implements ShouldQueue
      */
     public function __construct(
         private Term $term
-    ) {}
+    ) {
+    }
 
     /**
      * Execute the job.
@@ -36,7 +36,7 @@ class RefreshCourses implements ShouldQueue
     {
         $courses = $this->loadCourseData();
 
-        foreach($courses as &$course) {
+        foreach ($courses as &$course) {
             $building = $course['meetingsFaculty'][0]['meetingTime']['building'];
             $room = $course['meetingsFaculty'][0]['meetingTime']['room'];
             $location = $building && $room ? "$building $room" : null;
@@ -48,18 +48,22 @@ class RefreshCourses implements ShouldQueue
                 empty($course['meetingsFaculty'][0]['meetingTime']['wednesday']) ? false : 3,
                 empty($course['meetingsFaculty'][0]['meetingTime']['thursday']) ? false : 4,
                 empty($course['meetingsFaculty'][0]['meetingTime']['friday']) ? false : 5,
-                empty($course['meetingsFaculty'][0]['meetingTime']['saturday']) ? false : 6
+                empty($course['meetingsFaculty'][0]['meetingTime']['saturday']) ? false : 6,
             ]));
 
             $startTime = $course['meetingsFaculty'][0]['meetingTime']['beginTime'];
             $endTime = $course['meetingsFaculty'][0]['meetingTime']['endTime'];
 
             // Add colon to time, e.g. 1300 -> 13:00
-            if($startTime) $startTime = substr_replace($startTime, ':', 2, 0);
-            if($endTime) $endTime = substr_replace($endTime, ':', 2, 0);
+            if ($startTime) {
+                $startTime = substr_replace($startTime, ':', 2, 0);
+            }
+            if ($endTime) {
+                $endTime = substr_replace($endTime, ':', 2, 0);
+            }
 
             $courseModel = Course::updateOrCreate([
-                'remote_id' => $course['id']
+                'remote_id' => $course['id'],
             ], [
                 'name' => deep_clean_string($course['courseTitle']),
                 'crn' => $course['courseReferenceNumber'],
@@ -74,10 +78,10 @@ class RefreshCourses implements ShouldQueue
                 'professor_id' => $this->getProfessor($course['faculty'])->id ?? null,
                 'days' => $days,
                 'start_time' => $startTime,
-                'end_time' => $endTime
+                'end_time' => $endTime,
             ]);
 
-            foreach($this->getDistRequirements($course) as $requirement) {
+            foreach ($this->getDistRequirements($course) as $requirement) {
                 $courseModel->distRequirements()->syncWithoutDetaching($requirement->id);
             }
 
@@ -85,10 +89,10 @@ class RefreshCourses implements ShouldQueue
         }
 
         Log::info('scraping cross listings & labs');
-        foreach($courses as $course) {
+        foreach ($courses as $course) {
             $courseModel = $course['model'];
 
-            if($course['crossList'] !== null) {
+            if ($course['crossList'] !== null) {
                 $this->attachCrossListings(
                     $course['crossList'],
                     $courseModel,
@@ -100,7 +104,7 @@ class RefreshCourses implements ShouldQueue
             $hasLabs = $course['isSectionLinked'];
             $labsScraped = $courseModel->labs()->exists();
 
-            if($hasLabs && $isClass && !$labsScraped) {
+            if ($hasLabs && $isClass && ! $labsScraped) {
                 ScrapeLabs::dispatch($courseModel);
             }
         }
@@ -115,13 +119,13 @@ class RefreshCourses implements ShouldQueue
         $offset = 0;
         $totalCourses = 1;
 
-        while($offset < $totalCourses) {
+        while ($offset < $totalCourses) {
             $data = $client->get(
                 'https://macadmsys.macalester.edu/StudentRegistrationSsb/ssb/searchResults/searchResults',
                 [
                     'txt_term' => $this->term->code,
                     'pageMaxSize' => $pageSize,
-                    'pageOffset' => $offset
+                    'pageOffset' => $offset,
                 ]
             )->json();
 
@@ -137,12 +141,13 @@ class RefreshCourses implements ShouldQueue
     }
 
     /**
-     * @param array $faculty The raw `faculty` item from the course response
+     * @param  array  $faculty The raw `faculty` item from the course response
+     *
      * @todo Cache these to prevent excessive queries?
      */
     private function getProfessor(array $faculty): ?Professor
     {
-        if(empty($faculty[0]['displayName']) || empty($faculty[0]['emailAddress'])) {
+        if (empty($faculty[0]['displayName']) || empty($faculty[0]['emailAddress'])) {
             return null;
         }
 
@@ -151,26 +156,27 @@ class RefreshCourses implements ShouldQueue
         $name = implode(' ', array_reverse($name)); // Paul Cantrell
 
         return Professor::firstOrCreate([
-            'name' => $name
+            'name' => $name,
         ], [
-            'email' => $faculty[0]['emailAddress']
+            'email' => $faculty[0]['emailAddress'],
         ]);
     }
 
     /**
      * Parse and return the distribution requirements that this course fulfills
+     *
      * @return DistRequirement[]
      */
     private function getDistRequirements(array $course): array
     {
         $distRequirements = [];
 
-        foreach($course['sectionAttributes'] as $requirement) {
+        foreach ($course['sectionAttributes'] as $requirement) {
             $distRequirements[] = DistRequirement::firstOrCreate([
-                'code' => $requirement['code']
+                'code' => $requirement['code'],
             ], [
-                'name' => deep_clean_string($requirement['description'])
-           ]);
+                'name' => deep_clean_string($requirement['description']),
+            ]);
         }
 
         return $distRequirements;
@@ -181,41 +187,45 @@ class RefreshCourses implements ShouldQueue
      */
     private function attachCrossListings(string $identifier, Course $course, array $courses)
     {
-        $matches = array_filter($courses, fn($c) => $c['crossList'] === $identifier);
+        $matches = array_filter($courses, fn ($c) => $c['crossList'] === $identifier);
 
-        if(empty($matches)) {
+        if (empty($matches)) {
             Log::error("could not find matching course for $course->name");
+
             return;
         }
 
-        $matchIds = array_map(fn($c) => $c['id'], $matches);
+        $matchIds = array_map(fn ($c) => $c['id'], $matches);
 
         $matchModels = Course::whereIn('remote_id', $matchIds)->get();
         $course->crossListings()->syncWithoutDetaching($matchModels);
     }
 
     /**
-     * @param string $code e.g. "HIST"
-     * @param string $name e.g. "History"
+     * @param  string  $code e.g. "HIST"
+     * @param  string  $name e.g. "History"
+     *
      * @todo Cache these to prevent excessive queries?
      */
     private function getSubject(string $code, string $name): Subject
     {
         return Subject::firstOrCreate([
-            'code' => $code
+            'code' => $code,
         ], [
-            'name' => $name
+            'name' => $name,
         ]);
     }
 
     /**
      * Get a client with the propeper session state
+     *
      * @see https://jennydaman.gitlab.io/nubanned/#studentregistrationssb-clickcontinue
      */
     private function getSessionClient(string $term): PendingRequest
     {
         $request = Http::asForm()->post('https://macadmsys.macalester.edu/StudentRegistrationSsb/ssb/term/search', ['term' => $term]);
         $client = new Client(['cookies' => $request->cookies()]);
+
         return Http::setClient($client);
     }
 }

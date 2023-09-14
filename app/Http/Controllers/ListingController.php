@@ -36,7 +36,7 @@ class ListingController extends Controller
             'description' => ['required', 'string', 'max:500'],
             'price' => ['required', 'integer', 'min:0', 'max:5000'],
             'image' => ['required', 'image', 'max:20000'], // 20 MB
-            'miles_from_campus' => ['required', 'integer', 'min:0', 'max:9']
+            'miles_from_campus' => ['required', 'integer', 'min:0', 'max:9'],
         ]);
 
         $name = $data['image']->hashName();
@@ -46,16 +46,17 @@ class ListingController extends Controller
 
         $model = $request->user()->listings()->create($data);
 
-        dispatch(function() use ($model, $data) {
+        dispatch(function () use ($model, $data) {
             webhook_alert('New Marketplace Listing', [
                 'Title' => $data['title'],
                 'User' => $model->name,
                 'Description' => $data['description'],
-                'Price' => '$' . number_format($data['price'])
+                'Price' => '$'.number_format($data['price']),
             ], $data['image_url']);
         })->afterResponse();
 
         $model = $model->load('user');
+
         return new ListingResource($model);
     }
 
@@ -65,6 +66,7 @@ class ListingController extends Controller
     public function show(Listing $listing)
     {
         $listing->load('user');
+
         return new ListingResource($listing);
     }
 
@@ -88,11 +90,12 @@ class ListingController extends Controller
             'description' => ['nullable', 'string', 'max:500'],
             'price' => ['integer', 'min:0', 'max:1000'],
             'available' => 'boolean',
-            'miles_from_campus' => ['integer', 'min:0', 'max:9']
+            'miles_from_campus' => ['integer', 'min:0', 'max:9'],
         ]);
 
         $listing->update($data);
         $listing = $listing->load('user');
+
         return new ListingResource($listing);
     }
 

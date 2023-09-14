@@ -16,26 +16,28 @@ class FeedbackController extends Controller
     {
         $data = $request->validate([
             'email' => 'nullable|email',
-            'message' => 'required|string'
+            'message' => 'required|string',
         ]);
 
-        dispatch(function() use ($data) {
+        dispatch(function () use ($data) {
             try {
                 Mail::raw(
                     $data['message'],
-                    function($message) use ($data) {
+                    function ($message) use ($data) {
                         $user = User::firstWhere('email', $data['email']);
-                        $subject = '[75grand] Feedback from ' . ($user->name ?? 'User');
-                        
+                        $subject = '[75grand] Feedback from '.($user->name ?? 'User');
+
                         $message->to('jpaulos@macalester.edu');
                         $message->subject($subject);
-                        if($user) $message->replyTo($user->email);
+                        if ($user) {
+                            $message->replyTo($user->email);
+                        }
                     }
                 );
-            } catch(Exception $error) {
+            } catch (Exception $error) {
                 webhook_alert('New feedback', [
                     'Email' => $data['email'] ?? '(no email provided)',
-                    'Message' => $data['message']
+                    'Message' => $data['message'],
                 ]);
 
                 throw $error;

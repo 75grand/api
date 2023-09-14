@@ -14,7 +14,7 @@ class Professor extends Model
         'difficulty' => 'float',
         'rating' => 'float',
         'rating_count' => 'integer',
-        'take_again_percent' => 'integer'
+        'take_again_percent' => 'integer',
     ];
 
     public function courses()

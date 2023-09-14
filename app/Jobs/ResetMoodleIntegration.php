@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Models\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -21,7 +20,7 @@ class ResetMoodleIntegration implements ShouldQueue
     {
         User::all()->update([
             'moodle_user_id' => null,
-            'moodle_token' => null
+            'moodle_token' => null,
         ]);
     }
 }

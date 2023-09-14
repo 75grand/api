@@ -39,11 +39,11 @@ class User extends Authenticatable
      */
     public function getMoodleUrlAttribute(): ?string
     {
-        if($this->moodle_user_id && $this->moodle_token) {
+        if ($this->moodle_user_id && $this->moodle_token) {
             return
-                'https://moodle.macalester.edu/calendar/export_execute.php' .
-                '?userid=' . $this->moodle_user_id .
-                '&authtoken=' . $this->moodle_token .
+                'https://moodle.macalester.edu/calendar/export_execute.php'.
+                '?userid='.$this->moodle_user_id.
+                '&authtoken='.$this->moodle_token.
                 '&preset_what=all&preset_time=recentupcoming';
         }
 

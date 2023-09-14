@@ -18,7 +18,7 @@ class SwitchGuard
      */
     public function handle(Request $request, Closure $next, string $guard = null): Response
     {
-        if(in_array($guard, array_keys(config('auth.guards')))) {
+        if (in_array($guard, array_keys(config('auth.guards')))) {
             config(['auth.defaults.guard' => $guard]);
         }
 

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class DownloadController extends Controller
@@ -10,8 +9,13 @@ class DownloadController extends Controller
     public function automatic()
     {
         $userAgent = request()->userAgent();
-        if(Str::contains($userAgent, 'Android')) return $this->android();
-        if(Str::contains($userAgent, ['iPad', 'iPhone'])) return $this->ios();
+        if (Str::contains($userAgent, 'Android')) {
+            return $this->android();
+        }
+        if (Str::contains($userAgent, ['iPad', 'iPhone'])) {
+            return $this->ios();
+        }
+
         return redirect()->route('home');
     }
 

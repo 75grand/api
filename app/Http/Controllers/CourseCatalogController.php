@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Course;
 use App\Models\Term;
-use Illuminate\Http\Request;
 
 class CourseCatalogController extends Controller
 {

@@ -5,11 +5,9 @@ namespace App\Jobs;
 use App\Models\Course;
 use App\Models\Subject;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -24,7 +22,8 @@ class ScrapePrerequisites implements ShouldQueue
      */
     public function __construct(
         private Course $course
-    ) {}
+    ) {
+    }
 
     /**
      * Execute the job.
@@ -35,16 +34,16 @@ class ScrapePrerequisites implements ShouldQueue
 
         $html = Http::asForm()->post($url, [
             'term' => $this->course->term->code,
-            'courseReferenceNumber' => $this->course->crn
+            'courseReferenceNumber' => $this->course->crn,
         ])->body();
 
-        if(str_contains($html, 'No prerequisite information available.')) {
+        if (str_contains($html, 'No prerequisite information available.')) {
             $this->course->prerequisites = [];
         } else {
             $dom = HtmlDomParser::str_get_html($html);
             $this->rows = [...$dom->find('tbody > tr')];
             $this->rowIndex = 0;
-    
+
             $this->course->prerequisites = $this->parse();
             Log::debug("scraped prerequisites for {$this->course->name}");
         }
@@ -53,6 +52,7 @@ class ScrapePrerequisites implements ShouldQueue
     }
 
     private array $rows = [];
+
     private int $rowIndex = 0;
 
     /**
@@ -64,22 +64,23 @@ class ScrapePrerequisites implements ShouldQueue
         $values = [];
         $rule = 'AND';
 
-        while($this->rowIndex < count($this->rows)) {
+        while ($this->rowIndex < count($this->rows)) {
             $row = $this->rows[$this->rowIndex];
             $this->rowIndex++;
 
             $columns = $row->find('td');
 
-            $columns = array_map(function($column) {
+            $columns = array_map(function ($column) {
                 $text = $column->innerHtml();
+
                 return trim($text);
             }, [...$columns]);
 
             [$andOr, $openParen, $test, $score, $subjectName, $courseNumber, $level, $grade, $closeParen] = $columns;
-            
+
             $subject = self::findSubject($subjectName);
 
-            if($subject === null && $test === '') {
+            if ($subject === null && $test === '') {
                 // This often means that a department has been renamed
                 // https://www.notion.so/jeromepaulos/63dc008b0986498486dc58b263b69b41?pvs=4#35f5b86976c141658e6dd62b2b3893b0
                 Log::debug(
@@ -90,57 +91,62 @@ class ScrapePrerequisites implements ShouldQueue
                 );
             }
 
-            if($andOr) $rule = strtoupper($andOr);
+            if ($andOr) {
+                $rule = strtoupper($andOr);
+            }
 
-            if($openParen) {
+            if ($openParen) {
                 $parsedValue = $this->parse();
 
-                if($subject) {
+                if ($subject) {
                     $parsedValue['values'][] = [
                         'subject' => $subject->id,
-                        'course_number' => $courseNumber
+                        'course_number' => $courseNumber,
                     ];
-                } else if($test) {
+                } elseif ($test) {
                     $parsedValue['values'][] = [
-                        'test' => $test
+                        'test' => $test,
                     ];
                 }
 
                 $values[] = $parsedValue;
-            } else if($subject) {
+            } elseif ($subject) {
                 $values[] = [
                     'subject' => $subject->id,
-                    'couse_number' => $courseNumber
+                    'couse_number' => $courseNumber,
                 ];
-            } else if($test) {
+            } elseif ($test) {
                 $values[] = [
-                    'test' => $test
+                    'test' => $test,
                 ];
             }
 
-            if($closeParen) {
+            if ($closeParen) {
                 return [
                     'rule' => $rule,
-                    'values' => $values
+                    'values' => $values,
                 ];
             }
         }
 
         return [
             'rule' => $rule,
-            'values' => $values
+            'values' => $values,
         ];
     }
 
     private static function findSubject(string $subjectName): ?Subject
     {
-        $subjectName = match($subjectName) {
+        $subjectName = match ($subjectName) {
             'Humanities, Media, Cultural St' => 'Media and Cultural Studies',
             default => $subjectName
         };
 
         $subject = Subject::firstWhere('name', 'like', "$subjectName%");
-        if($subject === null) return null;
+        if ($subject === null) {
+            return null;
+        }
+
         return $subject;
     }
 }

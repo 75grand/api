@@ -9,7 +9,7 @@ class UserResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
-     * 
+     *
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
@@ -28,10 +28,10 @@ class UserResource extends JsonResource
             $this->mergeWhen($sameUser, [
                 'referral_code' => $this->referral_code,
                 'referrals_count' => $this->whenCounted('referrals',
-                    fn($count) => $count - $this->referrals_redeemed),
+                    fn ($count) => $count - $this->referrals_redeemed),
                 'referrals_per_prize' => 5,
-                'created_at' => $this->created_at
-            ])
+                'created_at' => $this->created_at,
+            ]),
         ];
     }
 }

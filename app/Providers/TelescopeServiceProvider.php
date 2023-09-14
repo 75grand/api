@@ -32,7 +32,7 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
         // });
 
         // https://laravel.com/docs/10.x/telescope#displaying-user-avatars
-        Telescope::avatar(fn(string $id) => User::find($id)->avatar);
+        Telescope::avatar(fn (string $id) => User::find($id)->avatar);
     }
 
     /**
@@ -62,7 +62,7 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
     {
         Gate::define('viewTelescope', function ($user) {
             return in_array($user->email, [
-                'jpaulos@macalester.edu'
+                'jpaulos@macalester.edu',
             ]);
         });
     }

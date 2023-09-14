@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -30,7 +29,7 @@ class RefreshCalendars implements ShouldQueue
      */
     public function handle(): void
     {
-        foreach(self::CALENDARS as $name => $url) {
+        foreach (self::CALENDARS as $name => $url) {
             RefreshCalendar::dispatch($name, $url);
         }
 

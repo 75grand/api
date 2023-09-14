@@ -21,8 +21,8 @@ class EventAttendeeController extends Controller
     public function update(CalendarEvent $event, Request $request)
     {
         $data = $request->validate(['attending' => 'required|boolean']);
-        
-        if($data['attending']) {
+
+        if ($data['attending']) {
             $request->user()->events()->syncWithoutDetaching($event);
         } else {
             $request->user()->events()->detach($event);

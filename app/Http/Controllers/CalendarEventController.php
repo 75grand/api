@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\CalendarEventResource;
 use App\Models\CalendarEvent;
-use Illuminate\Http\Request;
 
 class CalendarEventController extends Controller
 {
@@ -30,6 +29,7 @@ class CalendarEventController extends Controller
     public function show(CalendarEvent $event)
     {
         $event->loadCount('users');
+
         return new CalendarEventResource($event);
     }
 

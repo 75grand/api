@@ -26,7 +26,7 @@ class CalendarEventResource extends JsonResource
             'calendar_name' => $this->calendar_name,
             'image_url' => $this->image_url,
             'url' => $this->url,
-            'attendee_count' => $this->whenCounted('users')
+            'attendee_count' => $this->whenCounted('users'),
         ];
     }
 }

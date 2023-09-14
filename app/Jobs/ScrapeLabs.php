@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Models\Course;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -21,7 +20,8 @@ class ScrapeLabs implements ShouldQueue
      */
     public function __construct(
         private Course $course
-    ) {}
+    ) {
+    }
 
     /**
      * Execute the job.
@@ -36,9 +36,10 @@ class ScrapeLabs implements ShouldQueue
         $dom = HtmlDomParser::str_get_html($html);
         $courses = [...$dom->find('tbody > tr')];
 
-        $crns = array_map(function($course) {
+        $crns = array_map(function ($course) {
             $columns = [...$course->find('td')];
             $crn = $columns[count($columns) - 1]->innerHtml();
+
             return trim($crn);
         }, $courses);
 

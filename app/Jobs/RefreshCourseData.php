@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Models\Course;
 use App\Models\Term;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -29,7 +28,7 @@ class RefreshCourseData implements ShouldQueue
             ->orWhere('name', 'like', 'Fall%')
             ->orderBy('code', 'desc')
             ->limit(2)
-            ->get()->each(function($term) {
+            ->get()->each(function ($term) {
                 RefreshCourses::dispatchSync($term);
                 RefreshCourseDescriptions::dispatch($term);
             });
@@ -39,7 +38,7 @@ class RefreshCourseData implements ShouldQueue
 
         Log::info('scraping prerequisites');
         Course::whereNull('prerequisites')
-            ->get()->each(function($course) {
+            ->get()->each(function ($course) {
                 ScrapePrerequisites::dispatch($course);
             });
     }

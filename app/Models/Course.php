@@ -14,7 +14,7 @@ class Course extends Model
     protected $casts = [
         'prerequisites' => 'array',
         'days' => 'array',
-        'attendance_required' => 'boolean'
+        'attendance_required' => 'boolean',
     ];
 
     public function distRequirements()

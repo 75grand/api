@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Models\Professor;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -49,17 +48,21 @@ class RefreshRateMyProfessorsData implements ShouldQueue
             ->post('https://www.ratemyprofessors.com/graphql', ['query' => $query])
             ->json('data.search.teachers.edges');
 
-        foreach($professors as $professor) {
+        foreach ($professors as $professor) {
             $professor = $professor['node'];
 
             $review = $professor['mostUsefulRating']['comment'] ?? null;
-            if(strlen($review) < 10) $review = null;
+            if (strlen($review) < 10) {
+                $review = null;
+            }
 
             $takeAgainPercent = $professor['wouldTakeAgainPercentRounded'];
-            if($takeAgainPercent < 0) $takeAgainPercent = null;
+            if ($takeAgainPercent < 0) {
+                $takeAgainPercent = null;
+            }
 
             Professor::where(
-                'name', $professor['firstName'] . ' ' . $professor['lastName']
+                'name', $professor['firstName'].' '.$professor['lastName']
             )->update([
                 'difficulty' => $professor['avgDifficultyRounded'],
                 'rating' => $professor['avgRatingRounded'],
@@ -71,8 +74,8 @@ class RefreshRateMyProfessorsData implements ShouldQueue
                     '2' => $professor['ratingsDistribution']['r2'],
                     '3' => $professor['ratingsDistribution']['r3'],
                     '4' => $professor['ratingsDistribution']['r4'],
-                    '5' => $professor['ratingsDistribution']['r5']
-                ]
+                    '5' => $professor['ratingsDistribution']['r5'],
+                ],
             ]);
         }
     }

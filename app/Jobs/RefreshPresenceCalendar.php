@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Models\CalendarEvent;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -23,9 +22,9 @@ class RefreshPresenceCalendar implements ShouldQueue
     {
         $info = Http::get('https://api.presence.io/macalester/v1/app/campus')->json();
         $events = Http::get('https://api.presence.io/macalester/v1/events')->json();
-        
-        foreach($events as $event) {
-            if($event['hasCoverImage']) {
+
+        foreach ($events as $event) {
+            if ($event['hasCoverImage']) {
                 $imageUrl = sprintf(
                     '%s/event-photos/%s/%s',
                     $info['cdn'], // e.g. https://macalester-cdn.presence.io
@@ -37,7 +36,7 @@ class RefreshPresenceCalendar implements ShouldQueue
             }
 
             CalendarEvent::updateOrCreate([
-                'remote_id' => $event['eventNoSqlId']
+                'remote_id' => $event['eventNoSqlId'],
             ], [
                 'title' => deep_clean_string($event['eventName']),
                 'description' => empty($event['description']) ? null : deep_clean_string($event['description'], true),
@@ -45,8 +44,8 @@ class RefreshPresenceCalendar implements ShouldQueue
                 'start_date' => Carbon::parse($event['startDateTimeUtc']),
                 'end_date' => Carbon::parse($event['endDateTimeUtc']),
                 'calendar_name' => 'Clubs',
-                'url' => $info['portalLink'] . 'event/' . $event['uri'],
-                'image_url' => $imageUrl ?? null
+                'url' => $info['portalLink'].'event/'.$event['uri'],
+                'image_url' => $imageUrl ?? null,
             ]);
         }
     }

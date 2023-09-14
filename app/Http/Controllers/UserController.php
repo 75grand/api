@@ -11,12 +11,13 @@ class UserController extends Controller
     public function show(Request $request)
     {
         $user = $request->user()->loadCount('referrals');
+
         return new UserResource($user);
     }
 
     public function update(Request $request)
     {
-        $years = array_map(fn($n) => $n + date('Y'), range(0, 4));
+        $years = array_map(fn ($n) => $n + date('Y'), range(0, 4));
 
         $data = $request->validate([
             'expo_token' => ['nullable', 'string'],
@@ -24,12 +25,13 @@ class UserController extends Controller
             'position' => ['nullable', 'string', 'in:student,professor,staff'],
             'phone' => ['nullable', 'string', 'digits:10'],
             'moodle_token' => ['nullable', 'string'],
-            'moodle_user_id' => ['nullable', 'integer']
+            'moodle_user_id' => ['nullable', 'integer'],
         ]);
 
         $request->user()->update($data);
 
         $user = $request->user()->loadCount('referrals');
+
         return new UserResource($user);
     }
 }

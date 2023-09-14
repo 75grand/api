@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Models\CalendarEvent;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -23,23 +22,25 @@ class SendEventNotifications implements ShouldQueue
     {
         $events = CalendarEvent::query()
             ->where(
-                fn(Builder $query) => $query
+                fn (Builder $query) => $query
                     ->whereBetween('start_date', [
                         now()->roundMinute(),
-                        now()->roundMinute()->addMinute()->subMicro()
+                        now()->roundMinute()->addMinute()->subMicro(),
                     ])
                     ->orWhereBetween('start_date', [
                         now()->roundMinute()->addMinutes(15),
-                        now()->roundMinute()->addMinutes(15+1)->subMicro()
+                        now()->roundMinute()->addMinutes(15 + 1)->subMicro(),
                     ])
             )
             ->whereHas('users')
             ->with('users')
             ->get();
 
-        $events->each(function($event) {
+        $events->each(function ($event) {
             $tokens = $event->users->pluck('expo_token')->filter();
-            if($tokens->count() === 0) return;
+            if ($tokens->count() === 0) {
+                return;
+            }
 
             $minsUntil = $event->start_date->diffInRealMinutes();
             $body = sprintf(
@@ -56,7 +57,7 @@ class SendEventNotifications implements ShouldQueue
                     'title' => $event->title,
                     'body' => $body,
                     'sound' => 'default',
-                    'data' => ['url' => "grand://calendar/$event->id"]
+                    'data' => ['url' => "grand://calendar/$event->id"],
                 ]);
         });
     }

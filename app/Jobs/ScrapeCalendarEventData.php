@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Models\CalendarEvent;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -22,7 +21,8 @@ class ScrapeCalendarEventData implements ShouldQueue
      */
     public function __construct(
         private CalendarEvent $event
-    ) {}
+    ) {
+    }
 
     /**
      * Get the middleware the job should pass through.
@@ -34,7 +34,7 @@ class ScrapeCalendarEventData implements ShouldQueue
         return [
             (new WithoutOverlapping)
                 ->expireAfter(15) // 15 second timeout
-                ->releaseAfter(1) // 1 second between request
+                ->releaseAfter(1), // 1 second between request
         ];
     }
 
@@ -46,16 +46,16 @@ class ScrapeCalendarEventData implements ShouldQueue
         Log::info("scraping calendar data for {$this->event->title} ({$this->event->id})");
         $dom = HtmlDomParser::file_get_html($this->event->url);
 
-        if($image = $dom->findOneOrFalse('.context-image__image')) {
+        if ($image = $dom->findOneOrFalse('.context-image__image')) {
             $this->event->image_url = $image->getAttribute('src') ?: null;
         }
 
-        if($location = $dom->findOneOrFalse('#location-box')) {
+        if ($location = $dom->findOneOrFalse('#location-box')) {
             $this->event->latitude = $location->getAttribute('data-lat') ?: null;
             $this->event->longitude = $location->getAttribute('data-lon') ?: null;
         }
 
-        if($link = $dom->findOneOrFalse('.events-single-details__right .base-cta-featured')) {
+        if ($link = $dom->findOneOrFalse('.events-single-details__right .base-cta-featured')) {
             $this->event->url = $link->getAttribute('href') ?: null;
         }
 

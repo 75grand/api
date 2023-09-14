@@ -11,7 +11,7 @@ class WidgetController extends Controller
     {
         return [
             'users' => User::count(),
-            'users_enabled_notifications' => User::whereNotNull('expo_token')->count()
+            'users_enabled_notifications' => User::whereNotNull('expo_token')->count(),
         ];
     }
 }

@@ -10,7 +10,6 @@ class MenuController extends Controller
     /**
      * Handle the incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request, string $date)
@@ -22,11 +21,13 @@ class MenuController extends Controller
         // Atrium      = 161
         // Coffee Cart = 2109
 
-        return cache()->remember($request->path(), now()->addHour(), function() use ($date) {
+        return cache()->remember($request->path(), now()->addHour(), function () use ($date) {
             $cafeId = 159;
             $data = Http::get("https://legacy.cafebonappetit.com/api/1/cafe/$cafeId/date/$date")->json();
 
-            if(empty($data['cafe']['menu'][0]['days'])) return false;
+            if (empty($data['cafe']['menu'][0]['days'])) {
+                return false;
+            }
             $days = $data['cafe']['menu'][0]['days'];
 
             $day = $days[0];
@@ -34,54 +35,56 @@ class MenuController extends Controller
             $meals = $day['dayParts'];
             $mealTypes = $data['mealTypes'];
             $corIcons = $data['corIcons'];
-    
+
             $response = [];
-    
-            foreach($meals as $mealAbbr => $mealItems) {
-                foreach($mealItems as &$mealItem) {
+
+            foreach ($meals as $mealAbbr => $mealItems) {
+                foreach ($mealItems as &$mealItem) {
                     $mealItem = [
                         'id' => (int) $mealItem['item_id'],
                         'name' => title_case($mealItem['description']),
                         'station' => title_case($stations[$mealItem['station_id']]['station']),
-                        'dietary_restrictions' => array_map(fn($id) => ([
+                        'dietary_restrictions' => array_map(fn ($id) => ([
                             'label' => $corIcons[$id]['type'],
                             'image_url' => $corIcons[$id]['image64Src'],
-                            'description' => ucfirst(explode(': ', $corIcons[$id]['mouseover'], 2)[1])
-                        ]), $mealItem['corIcons'] ?? [])
+                            'description' => ucfirst(explode(': ', $corIcons[$id]['mouseover'], 2)[1]),
+                        ]), $mealItem['corIcons'] ?? []),
                     ];
                 }
-    
-                foreach($mealTypes as $mealType) {
-                    if($mealType['abbreviation'] === $mealAbbr) {
+
+                foreach ($mealTypes as $mealType) {
+                    if ($mealType['abbreviation'] === $mealAbbr) {
                         $response[$mealType['meal_type']] = $mealItems;
                     }
                 }
             }
-    
+
             return $response;
         }) ?: abort(404);
     }
 
     public function show(Request $request, int $id)
     {
-        return cache()->rememberForever($request->path(), function() use ($id) {
+        return cache()->rememberForever($request->path(), function () use ($id) {
             $data = Http::get("https://legacy.cafebonappetit.com/api/2/items?item=$id");
             $item = $data['items'][$id];
 
             $nutrition = [];
-            foreach($item['nutrition_details'] as $detail) {
+            foreach ($item['nutrition_details'] as $detail) {
                 $label = $detail['label'];
                 $value = $detail['value'];
                 $unit = $detail['unit'];
 
                 $nutrition[$label] = $value;
-                if(in_array($unit, ['oz'])) $nutrition[$label] .= ' ';
+                if (in_array($unit, ['oz'])) {
+                    $nutrition[$label] .= ' ';
+                }
                 $nutrition[$label] .= $unit;
             }
 
             return [
                 'name' => title_case($item['label']),
-                'nutrition' => $nutrition
+                'nutrition' => $nutrition,
             ];
         });
     }

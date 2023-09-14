@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Models\Term;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -25,11 +24,11 @@ class RefreshTerms implements ShouldQueue
             'https://macadmsys.macalester.edu/StudentRegistrationSsb/ssb/classSearch/getTerms?offset=1&max=500'
         )->json();
 
-        foreach($terms as $term) {
+        foreach ($terms as $term) {
             Term::updateOrCreate([
-                'code' => $term['code']
+                'code' => $term['code'],
             ], [
-                'name' => Str::replace(' (View Only)', '', $term['description'])
+                'name' => Str::replace(' (View Only)', '', $term['description']),
             ]);
         }
     }

@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Models\CalendarEvent;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -24,19 +23,19 @@ class RefreshSportsCalendar implements ShouldQueue
         $feed = Http::get('https://athletics.macalester.edu/calendar.ashx/calendar.rss');
         $feed = simplexml_load_string($feed);
 
-        foreach($feed->channel->item as $item) {
+        foreach ($feed->channel->item as $item) {
             $ev = $item->children('ev', true); // Event information
             $s = $item->children('s', true); // Team information
 
             CalendarEvent::updateOrCreate([
-                'remote_id' => $item->guid
+                'remote_id' => $item->guid,
             ], [
                 'title' => deep_clean_string(strstr($item->description, '\n', true)),
                 'location' => $ev->location ?? null,
                 'start_date' => Carbon::parse($ev->startdate),
                 'end_date' => Carbon::parse($ev->enddate),
                 'calendar_name' => 'Sports',
-                'image_url' => image_cdn_url($s->opponentlogo, trim: 5) ?? null
+                'image_url' => image_cdn_url($s->opponentlogo, trim: 5) ?? null,
             ]);
         }
     }

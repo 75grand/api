@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,7 +14,7 @@ class CalendarEvent extends Model
     protected $casts = [
         'checked_for_data' => 'boolean',
         'start_date' => 'datetime',
-        'end_date' => 'datetime'
+        'end_date' => 'datetime',
     ];
 
     public function users()
@@ -29,12 +28,17 @@ class CalendarEvent extends Model
         $endDate = $this->end_date->setTimezone('America/Chicago');
 
         $diff = $endDate->diffInHours($startDate);
-        if($diff === 24) return 'All Day';
+        if ($diff === 24) {
+            return 'All Day';
+        }
 
         $startDateString = $startDate->format('g:i A');
-        if($diff === 0) return $startDateString;
+        if ($diff === 0) {
+            return $startDateString;
+        }
 
         $endDateString = $endDate->format('g:i A');
-        return $startDateString . ' – ' . $endDateString;
+
+        return $startDateString.' – '.$endDateString;
     }
 }

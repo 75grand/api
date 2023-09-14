@@ -13,11 +13,11 @@ class NewsController extends Controller
     {
         $sources = [];
 
-        foreach(NewsSource::cases() as $source) {
+        foreach (NewsSource::cases() as $source) {
             $sources[$source->value] = [
                 'name' => $source->getName(),
                 'website' => $source->getWebsite(),
-                'items' => $this->show($source->value)
+                'items' => $this->show($source->value),
             ];
         }
 
@@ -26,12 +26,12 @@ class NewsController extends Controller
 
     public function show(string $source): Collection
     {
-        return cache()->remember("news-$source", now()->addHour(), function() use ($source) {
+        return cache()->remember("news-$source", now()->addHour(), function () use ($source) {
             $source = NewsSource::from($source);
             $url = $source->getUrl();
             $articles = Http::get($url)->json();
 
-            return match($source) {
+            return match ($source) {
                 NewsSource::MACALESTER => self::formatWordPressArticles($articles),
                 NewsSource::THE_MAC_WEEKLY => self::formatWordPressArticles($articles),
                 NewsSource::THE_HEGEMONOCLE => self::formatHegeArticles($articles),
@@ -43,7 +43,7 @@ class NewsController extends Controller
 
     private static function formatRedditPosts(array $data): Collection
     {
-        return collect($data['data']['children'])->map(function($post) {
+        return collect($data['data']['children'])->map(function ($post) {
             $data = $post['data'];
 
             return [
@@ -54,7 +54,7 @@ class NewsController extends Controller
                 'author' => $data['author'],
                 'comments' => $data['num_comments'],
                 'score' => $data['score'],
-                'stickied' => $data['stickied']
+                'stickied' => $data['stickied'],
             ];
         });
     }
@@ -64,14 +64,13 @@ class NewsController extends Controller
      */
     private static function formatWordPressArticles(array $data): Collection
     {
-        return collect($data)->transform(fn($article) => [
+        return collect($data)->transform(fn ($article) => [
             'title' => strip_tags(html_entity_decode($article['title']['rendered'] ?? $article['title'])),
             'date' => date_create($article['date'])->format('c'), // I give up (https://core.trac.wordpress.org/ticket/41032)
-            'image_url' =>
-                $article['_embedded']['wp:featuredmedia'][0]['media_details']['sizes']['medium_large']['source_url']
+            'image_url' => $article['_embedded']['wp:featuredmedia'][0]['media_details']['sizes']['medium_large']['source_url']
                     ?? $article['_embedded']['wp:featuredmedia'][0]['source_url']
                     ?? null,
-            'url' => $article['link']
+            'url' => $article['link'],
         ]);
     }
 
@@ -80,20 +79,21 @@ class NewsController extends Controller
      */
     private static function formatHegeArticles(array $data): Collection
     {
-        return collect($data['items'])->transform(fn($article) => [
+        return collect($data['items'])->transform(fn ($article) => [
             'title' => strip_tags(html_entity_decode($article['title'])),
             'date' => Carbon::create(...$article['publishDate']),
             'image_url' => "https://image.isu.pub/{$article['documentId']}/jpg/page_1_thumb_large.jpg",
-            'url' => "https://issuu.com/{$article['uri']}/1?ff"
+            'url' => "https://issuu.com/{$article['uri']}/1?ff",
         ]);
     }
 
-    private static function formatSummitArticles(array $data): Collection {
-        return collect($data)->transform(fn($article) => [
+    private static function formatSummitArticles(array $data): Collection
+    {
+        return collect($data)->transform(fn ($article) => [
             'title' => $article['title'],
             'date' => date_create($article['date'])->format('c'),
             'image_url' => $article['image'],
-            'url' => $article['link']
+            'url' => $article['link'],
         ])->take(5);
     }
 }

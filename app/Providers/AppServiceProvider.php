@@ -37,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
         JsonResource::withoutWrapping();
 
         Sanctum::getAccessTokenFromRequestUsing(
-            fn(Request $request) => $request->token ?? $request->bearerToken()
+            fn (Request $request) => $request->token ?? $request->bearerToken()
         );
 
         // DB::listen(function($query) {
@@ -50,15 +50,15 @@ class AppServiceProvider extends ServiceProvider
         //     );
         // });
 
-        Http::globalRequestMiddleware(function($request) {
+        Http::globalRequestMiddleware(function ($request) {
             return $request->withHeader('User-Agent', 'api@75grand.net');
         });
 
-        Queue::failing(function(JobFailed $event) {
+        Queue::failing(function (JobFailed $event) {
             webhook_alert('Job Failed', [
                 'Name' => $event->job->getName(),
-                'Body' => '```' . $event->job->getRawBody() . '```',
-                'Connection' => $event->connectionName
+                'Body' => '```'.$event->job->getRawBody().'```',
+                'Connection' => $event->connectionName,
             ]);
         });
     }

@@ -6,7 +6,6 @@ use App\Models\CalendarEvent;
 use Carbon\Carbon;
 use ICal\ICal;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -23,7 +22,8 @@ class RefreshCalendar implements ShouldQueue
     public function __construct(
         private string $calendarName,
         private string $calendarUrl
-    ) {}
+    ) {
+    }
 
     /**
      * Execute the job.
@@ -36,9 +36,9 @@ class RefreshCalendar implements ShouldQueue
         $events = $calendar->eventsFromInterval('3 months');
         $timeZone = $calendar->calendarTimeZone();
 
-        foreach($events as $event) {
+        foreach ($events as $event) {
             $savedEvent = CalendarEvent::updateOrCreate([
-                'remote_id' => $event->uid
+                'remote_id' => $event->uid,
             ], [
                 'title' => $this->clean($event->summary),
                 'description' => $this->clean($event->description),
@@ -46,11 +46,11 @@ class RefreshCalendar implements ShouldQueue
                 'start_date' => Carbon::parse($event->dtstart, $timeZone)->format('c'),
                 'end_date' => Carbon::parse($event->dtend, $timeZone)->format('c'),
                 'calendar_name' => $this->calendarName,
-                'url' => $this->clean($event->url)
+                'url' => $this->clean($event->url),
             ]);
 
             $mightHaveData =
-                !$savedEvent->checked_for_data &&
+                ! $savedEvent->checked_for_data &&
                 $savedEvent->url &&
                 Str::startsWith($savedEvent->url, 'https://www.macalester.edu/calendar/event/');
 
@@ -60,7 +60,9 @@ class RefreshCalendar implements ShouldQueue
 
     private function clean(?string $string): ?string
     {
-        if($string === null) return null;
+        if ($string === null) {
+            return null;
+        }
 
         $string = html_entity_decode($string);
         $string = strip_tags($string);

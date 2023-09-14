@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\InvalidStateException;
 
@@ -24,7 +23,7 @@ class AdminAuthController extends Controller
 
         try {
             $googleUser = Socialite::driver('google')->user();
-        } catch(InvalidStateException) {
+        } catch (InvalidStateException) {
             return redirect()->route('login');
         }
 

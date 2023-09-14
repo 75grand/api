@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
-use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Str;
+use Laravel\Socialite\Facades\Socialite;
 
 class MobileAuthController extends Controller
 {
@@ -18,12 +17,12 @@ class MobileAuthController extends Controller
 
         $referralCode = Str::lower(request('referral_code'));
 
-        if($referralCode === env('APP_STORE_REVIEW_SECRET')) {
+        if ($referralCode === env('APP_STORE_REVIEW_SECRET')) {
             return [
                 'redirect_url' => route('auth.callback', [
                     'is_reviewer' => true,
-                    'callback_url' => request('callback_url')
-                ])
+                    'callback_url' => request('callback_url'),
+                ]),
             ];
         }
 
@@ -35,11 +34,11 @@ class MobileAuthController extends Controller
                     'state' => json_encode([
                         'device' => request('device'),
                         'callback_url' => request('callback_url'),
-                        'referral_code' => request('referral_code')
-                    ])
+                        'referral_code' => request('referral_code'),
+                    ]),
                 ])
                 ->redirect()
-                ->getTargetUrl()
+                ->getTargetUrl(),
         ];
     }
 
@@ -54,6 +53,7 @@ class MobileAuthController extends Controller
 
     /**
      * Log in a regular user
+     *
      * @return string Callback URL with `token` parameter attached
      */
     private function logInUser(): string
@@ -64,10 +64,10 @@ class MobileAuthController extends Controller
         $data = json_decode(request('state'), true);
 
         $user = User::updateOrCreate([
-            'email' => $googleUser->email
+            'email' => $googleUser->email,
         ], [
             'name' => $googleUser->name,
-            'avatar' => $googleUser->avatar
+            'avatar' => $googleUser->avatar,
         ]);
 
         $user->tokens()->where('name', $data['device'])->delete();
@@ -75,17 +75,17 @@ class MobileAuthController extends Controller
 
         $callback = $this->formatCallbackUrl($data['callback_url'], $token);
 
-        if($user->wasRecentlyCreated) {
+        if ($user->wasRecentlyCreated) {
             $callback = "$callback&created=true";
 
             $webhookData = [
                 'Name' => $user->name,
                 'Email' => $user->email,
-                'Device' => $data['device']
+                'Device' => $data['device'],
             ];
 
             // Save referral information
-            if(!empty($data['referral_code'])) {
+            if (! empty($data['referral_code'])) {
                 $code = Str::lower($data['referral_code']);
 
                 $referrer = User::firstWhere('referral_code', $code);
@@ -100,7 +100,7 @@ class MobileAuthController extends Controller
 
             $user->save();
 
-            dispatch(function() use ($user, $webhookData) {
+            dispatch(function () use ($user, $webhookData) {
                 webhook_alert("New User: $user->name", $webhookData, $user->avatar);
             })->afterResponse();
         }
@@ -110,18 +110,19 @@ class MobileAuthController extends Controller
 
     /**
      * Log in an App Store or Google Play Store reviewer
+     *
      * @return string Callback URL with `token` parameter attached
      */
     private function logInReviewer(): string
     {
-        dispatch(function() {
+        dispatch(function () {
             webhook_alert('App store reviewer just logged in!');
         })->afterResponse();
 
         $user = User::find(env('APP_STORE_REVIEW_ACCOUNT_ID'));
         $token = $user->createToken('App Store Review')->plainTextToken;
         $callback = request('callback_url');
-        
+
         return $this->formatCallbackUrl($callback, $token);
     }
 
@@ -143,7 +144,7 @@ class MobileAuthController extends Controller
             Str::endsWith($googleUser->email, '@macalester.edu')
                 || in_array($googleUser->email, [
                     'borgersbenjamin@gmail.com',
-                    'eliot.supceo@gmail.com'
+                    'eliot.supceo@gmail.com',
                 ]),
             401, 'Please use a Macalester email address'
         );

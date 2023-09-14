@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Models\Listing;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -27,7 +26,7 @@ class SendStaleListingNotifications implements ShouldQueue
             ->with('user')
             ->get();
 
-        foreach($listings as $listing) {
+        foreach ($listings as $listing) {
             $trimmedTitle = Str::limit($listing->title, 25);
 
             Http::withToken(env('EXPO_ACCESS_TOKEN'))
@@ -36,7 +35,7 @@ class SendStaleListingNotifications implements ShouldQueue
                     'title' => 'Is this still for sale?',
                     'body' => "It’s been a second since you posted “{$trimmedTitle}”. If it’s not available, you can update the listing.",
                     'sound' => 'default',
-                    'data' => ['url' => "grand://marketplace/$listing->id"]
+                    'data' => ['url' => "grand://marketplace/$listing->id"],
                 ]);
         }
     }

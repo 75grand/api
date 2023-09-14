@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use Exception;
-use ICal\ICal;
 use ICal\Event as ICalEvent;
+use ICal\ICal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
@@ -20,13 +19,13 @@ class MoodleController extends Controller
         $url = $request->user()->moodle_url;
         abort_if($url === null, 400);
 
-        return cache()->remember(__METHOD__.$url, now()->addMinutes(5), function() use ($url, $request) {
+        return cache()->remember(__METHOD__.$url, now()->addMinutes(5), function () use ($url, $request) {
             $data = Http::get($url)->body();
 
-            if(Str::contains($data, 'Invalid authentication', true)) {
+            if (Str::contains($data, 'Invalid authentication', true)) {
                 $request->user()->update([
                     'moodle_user_id' => null,
-                    'moodle_token' => null
+                    'moodle_token' => null,
                 ]);
 
                 return null;
@@ -38,12 +37,12 @@ class MoodleController extends Controller
             $events = $cal->events();
             $timeZone = $cal->calendarTimeZone();
 
-            return collect($events)->map(function(ICalEvent $event) use ($timeZone) {
+            return collect($events)->map(function (ICalEvent $event) use ($timeZone) {
                 return [
                     'id' => explode('@', $event->uid)[0],
                     'title' => Str::replaceLast(' is due', '', $event->summary),
                     'due' => Carbon::parse($event->dtstart, $timeZone)->format('c'),
-                    'class' => self::formatClass($event->categories)
+                    'class' => self::formatClass($event->categories),
                 ];
             })->toArray();
         }) ?? abort(400);
@@ -53,11 +52,15 @@ class MoodleController extends Controller
     {
         // Match a separated group of three numbers
         $number = Str::match('/(?:\D|^)(\d{3})(?:\D|$)/i', $class);
-        if(!$number) return $class;
+        if (! $number) {
+            return $class;
+        }
 
         // Match a separated group of four letters
         $department = Str::match('/(?:[^a-z]|^)([a-z]{4})(?:[^a-z]|$)/i', $class);
-        if(!$department) return $class;
+        if (! $department) {
+            return $class;
+        }
         $department = Str::upper($department);
 
         return "$department $number";

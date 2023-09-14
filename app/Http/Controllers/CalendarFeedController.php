@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Spatie\IcalendarGenerator\Components\Calendar;
 use Illuminate\Support\Str;
+use Spatie\IcalendarGenerator\Components\Calendar;
 use Spatie\IcalendarGenerator\Components\Event;
 use Spatie\IcalendarGenerator\Components\Timezone;
 
@@ -25,24 +25,34 @@ class CalendarFeedController extends Controller
             ->withoutAutoTimezoneComponents()
             ->timezone(Timezone::create('America/Chicago'));
 
-        foreach($user->events as $event) {
+        foreach ($user->events as $event) {
             $iCalEvent = Event::create()
                 ->name($event->title)
                 ->uniqueIdentifier($event->id)
                 ->period($event->start_date, $event->end_date);
 
-            if($event->description) $iCalEvent->description($event->description);
-            if($event->latitude && $event->longitude) $iCalEvent->coordinates($event->latitude, $event->longitude);
-            if($event->location) $iCalEvent->address($event->location);
-            if($event->image_url) $iCalEvent->image($event->image_url);
-            if($event->url) $iCalEvent->url($event->url);
+            if ($event->description) {
+                $iCalEvent->description($event->description);
+            }
+            if ($event->latitude && $event->longitude) {
+                $iCalEvent->coordinates($event->latitude, $event->longitude);
+            }
+            if ($event->location) {
+                $iCalEvent->address($event->location);
+            }
+            if ($event->image_url) {
+                $iCalEvent->image($event->image_url);
+            }
+            if ($event->url) {
+                $iCalEvent->url($event->url);
+            }
 
             $calendar->event($iCalEvent);
         }
 
         return response($calendar->get(), headers: [
             'Content-Type' => 'text/calendar; charset=utf-8',
-            'Content-Disposition' => 'attachment; filename="events.ics"'
+            'Content-Disposition' => 'attachment; filename="events.ics"',
         ]);
     }
 }
