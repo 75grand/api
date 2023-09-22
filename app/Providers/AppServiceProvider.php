@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Sanctum\Sanctum;
+use Psr\Http\Message\RequestInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -50,7 +51,13 @@ class AppServiceProvider extends ServiceProvider
         //     );
         // });
 
-        Http::globalRequestMiddleware(function($request) {
+        Http::globalRequestMiddleware(function(RequestInterface $request) {
+            DB::table('requests')->insertOrIgnore([
+                'method' => $request->getMethod(),
+                'host' => $request->getUri()->getHost(),
+                'date' => now()
+            ]);
+
             return $request->withHeader('User-Agent', 'api@75grand.net');
         });
 
