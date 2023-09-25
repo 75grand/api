@@ -11,6 +11,7 @@ class UserController extends Controller
     public function show(Request $request)
     {
         $user = $request->user()->loadCount('referrals');
+        $request->user()->touch(); // Record when use was last active
         return new UserResource($user);
     }
 
