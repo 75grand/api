@@ -29,6 +29,7 @@ class DispatchRefreshMoodleTasks extends Command
     public function handle()
     {
         $users = User::whereNotNull(['moodle_token', 'moodle_user_id'])->get();
+
         $jobs = $users->map(function($user, $index) {
             $job = new RefreshMoodleTasks($user);
             return $job->delay(now()->addSeconds($index*3));
