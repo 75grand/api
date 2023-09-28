@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Models\MoodleTask;
 use App\Models\User;
 use Carbon\Carbon;
 use ICal\ICal;
@@ -14,6 +13,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
 use Illuminate\Bus\Batchable;
+use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
@@ -27,6 +27,18 @@ class RefreshMoodleTasks implements ShouldQueue
     public function __construct(
         private User $user
     ) {}
+
+    /**
+     * Get the middleware the job should pass through.
+     *
+     * @return array<int, object>
+     */
+    public function middleware(): array
+    {
+        return [
+            (new WithoutOverlapping)->expireAfter(10)
+        ];
+    }
 
     /**
      * Execute the job.
@@ -52,19 +64,24 @@ class RefreshMoodleTasks implements ShouldQueue
         $events = $cal->events();
         $timeZone = $cal->calendarTimeZone();
 
-        DB::beginTransaction();
-
-        foreach($events as $event) {
-            $this->user->tasks()->updateOrCreate([
-                'remote_id' => $event->uid
-            ], [
-                'title' => Str::replaceLast(' is due', '', $event->summary),
-                'due_date' => Carbon::parse($event->dtstart, $timeZone),
-                'class' => $this->formatClass($event->categories)
-            ]);
+        try {
+            DB::beginTransaction();
+    
+            foreach($events as $event) {
+                $this->user->tasks()->updateOrCreate([
+                    'remote_id' => $event->uid
+                ], [
+                    'title' => Str::replaceLast(' is due', '', $event->summary),
+                    'due_date' => Carbon::parse($event->dtstart, $timeZone),
+                    'class' => $this->formatClass($event->categories),
+                    'description' => $event->description
+                ]);
+            }
+    
+            DB::commit();
+        } finally {
+            DB::rollBack();
         }
-
-        DB::commit();
     }
 
     private function formatClass(string $class): string

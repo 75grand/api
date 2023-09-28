@@ -14,16 +14,20 @@ return new class extends Migration
     {
         Schema::create('moodle_tasks', function (Blueprint $table) {
             $table->id();
-            $table->string('remote_id')->unique();
+            $table->string('remote_id');
 
-            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
 
             $table->string('title');
             $table->string('class');
+            $table->text('description')->nullable();
+
             $table->dateTime('due_date');
             $table->dateTime('completed_at')->nullable();
 
             $table->timestamps();
+
+            $table->unique(['remote_id', 'user_id']);
         });
     }
 
