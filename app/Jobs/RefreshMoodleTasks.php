@@ -14,6 +14,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
 use Illuminate\Bus\Batchable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class RefreshMoodleTasks implements ShouldQueue
@@ -51,19 +52,19 @@ class RefreshMoodleTasks implements ShouldQueue
         $events = $cal->events();
         $timeZone = $cal->calendarTimeZone();
 
+        DB::beginTransaction();
+
         foreach($events as $event) {
-            $task = $this->user->tasks()->updateOrCreate([
+            $this->user->tasks()->updateOrCreate([
                 'remote_id' => $event->uid
             ], [
                 'title' => Str::replaceLast(' is due', '', $event->summary),
                 'due_date' => Carbon::parse($event->dtstart, $timeZone),
                 'class' => $this->formatClass($event->categories)
             ]);
-
-            if($task->wasRecentlyCreated) {
-                // notify about new assignment
-            }
         }
+
+        DB::commit();
     }
 
     private function formatClass(string $class): string
