@@ -19,8 +19,7 @@ class MoodleTaskResource extends JsonResource
             'title' => $this->title,
             'class' => $this->class,
             'description' => $this->description,
-            'due_date' => $this->due_date,
-            'due' => $this->due_date, // For backwards compatability
+            'due' => $this->due_date,
             'completed_at' => $this->completed_at
         ];
     }
