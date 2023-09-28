@@ -21,15 +21,15 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->job(new RefreshCalendars)->hourlyAt(30)->sentryMonitor('refresh-calendars');
-        $schedule->job(new RefreshCourseData)->dailyAt('4:00')->sentryMonitor('refresh-course-data');
+        $schedule->job(new RefreshCourseData)->dailyAt('5:00' /* 12:00 AM CST */)->sentryMonitor('refresh-course-data');
 
         $schedule->job(new SendEventNotifications)->everyMinute()->sentryMonitor('send-event-notifications');
         $schedule->job(new SendStaleListingNotifications)->dailyAt('23:00' /* 6:00 PM CST */)->sentryMonitor('send-stale-notifications');
 
-        $schedule->command('app:refresh-moodle')->dailyAt('8:00');
+        $schedule->command('app:refresh-moodle')->twiceDailyAt('5:00' /* 12:00 AM CST */, '17:00' /* 12:00 PM CST */);
 
-        $schedule->job(new ResetMoodleIntegration)->yearlyOn(1, 1, '0:0');
-        $schedule->job(new ResetMoodleIntegration)->yearlyOn(6, 1, '0:0');
+        $schedule->job(new ResetMoodleIntegration)->yearlyOn(1 /* January 1st */);
+        $schedule->job(new ResetMoodleIntegration)->yearlyOn(6 /* June 1st */);
 
         // https://laravel.com/docs/10.x/telescope#data-pruning
         $schedule->command('telescope:prune')->daily();
