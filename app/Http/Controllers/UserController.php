@@ -5,14 +5,26 @@ namespace App\Http\Controllers;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
     public function show(Request $request)
     {
         $user = $request->user()->loadCount('referrals');
-        $request->user()->touch(); // Record when use was last active
+
+        // Store version and bump `updated_at` time
+        $request->user()->update(['version' => $this->getVersion()]);
+        // $request->user()->touch();
+
         return new UserResource($user);
+    }
+
+    private function getVersion(): ?string
+    {
+        $regex = '/^75grand\/.+ (\d+\.\d+\.\d+)$/';
+        $userAgent = request()->userAgent();
+        return Str::match($regex, $userAgent) ?: request()->user()->version;
     }
 
     public function update(Request $request)
