@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('url')->nullable();
 
             $table->boolean('checked_for_data')->default(false);
-            $table->string('image_url')->nullable();
+            $table->text('image_url')->nullable();
         });
     }
 
