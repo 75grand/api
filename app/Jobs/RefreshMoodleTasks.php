@@ -33,9 +33,6 @@ class RefreshMoodleTasks implements ShouldQueue
      */
     public function handle(): void
     {
-        Log::info("Fetching Moodle assignments for {$this->user->name}");
-        return;
-
         $url = $this->user->moodle_url;
         $data = Http::get($url)->body();
 
