@@ -49,4 +49,9 @@ class User extends Authenticatable
 
         return null;
     }
+
+    public function tasks()
+    {
+        return $this->hasMany(MoodleTask::class);
+    }
 }
