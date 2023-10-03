@@ -15,6 +15,7 @@ use Illuminate\Support\Str;
 use Illuminate\Bus\Batchable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class RefreshMoodleTasks implements ShouldQueue
 {
@@ -32,6 +33,9 @@ class RefreshMoodleTasks implements ShouldQueue
      */
     public function handle(): void
     {
+        Log::info("Fetching Moodle assignments for {$this->user->name}");
+        return;
+
         $url = $this->user->moodle_url;
         $data = Http::get($url)->body();
 
