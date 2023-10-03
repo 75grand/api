@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
 class MoodleTaskResource extends JsonResource
 {
@@ -15,11 +16,13 @@ class MoodleTaskResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
+            'id' => Str::before($this->remote_id, '@'),
             'title' => $this->title,
-            'class' => $this->class,
-            'description' => $this->description,
             'due' => $this->due_date,
+            'class' => $this->class,
+
+            // 'id' => $this->id,
+            'description' => $this->description,
             'completed_at' => $this->completed_at
         ];
     }
