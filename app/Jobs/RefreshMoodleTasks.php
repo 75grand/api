@@ -36,7 +36,7 @@ class RefreshMoodleTasks implements ShouldQueue
     public function middleware(): array
     {
         return [
-            (new WithoutOverlapping)->expireAfter(10)
+            (new WithoutOverlapping)->expireAfter(5)
         ];
     }
 
