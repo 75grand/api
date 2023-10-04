@@ -6,7 +6,6 @@ use App\Jobs\RefreshCalendars;
 use App\Jobs\RefreshCourseData;
 use App\Jobs\ResetMoodleIntegration;
 use App\Jobs\SendEventNotifications;
-use App\Jobs\SendDailyMoodleNotifications;
 use App\Jobs\SendStaleListingNotifications;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -28,7 +27,6 @@ class Kernel extends ConsoleKernel
         $schedule->job(new SendStaleListingNotifications)->dailyAt('23:00' /* 6:00 PM CST */)->sentryMonitor('send-stale-notifications');
 
         $schedule->command('app:refresh-moodle')->everySixHours();
-        $schedule->job(new SendDailyMoodleNotifications)->dailyAt('13:30' /* 8:30 AM CST */);
 
         $schedule->job(new ResetMoodleIntegration)->yearlyOn(1 /* January 1st */);
         $schedule->job(new ResetMoodleIntegration)->yearlyOn(6 /* June 1st */);
