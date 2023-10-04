@@ -96,7 +96,7 @@ if(!function_exists('send_expo_notification')) {
                 'title' => $title,
                 'body' => $body,
                 'sound' => 'default',
-                'data' => $data
+                'data' => (object) $data
             ]);
     }
 }
