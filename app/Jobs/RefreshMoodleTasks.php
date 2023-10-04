@@ -21,6 +21,8 @@ class RefreshMoodleTasks implements ShouldQueue
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public const SECONDS_PER_JOB = 3;
+
     /**
      * Create a new job instance.
      */

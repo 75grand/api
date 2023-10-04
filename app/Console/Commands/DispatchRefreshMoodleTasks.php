@@ -32,7 +32,8 @@ class DispatchRefreshMoodleTasks extends Command
 
         $jobs = $users->map(function($user, $index) {
             $job = new RefreshMoodleTasks($user);
-            return $job->delay(now()->addSeconds($index*3));
+            $offset = now()->addSeconds($index * RefreshMoodleTasks::SECONDS_PER_JOB);
+            return $job->delay($offset);
         });
 
         Bus::batch($jobs)
