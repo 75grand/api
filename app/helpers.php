@@ -85,3 +85,18 @@ if(!function_exists('deep_clean_string')) {
         return $string;
     }
 }
+
+if(!function_exists('send_expo_notification')) {
+    // I decided not to use Laravel's notification system because it
+    // doesn't support sending multiple tokens per rquest to Expo
+    function send_expo_notification(string|array $to, string $title, string $body, array $data = []) {
+        Http::withToken(env('EXPO_ACCESS_TOKEN'))
+            ->post('https://exp.host/--/api/v2/push/send', [
+                'to' => $to,
+                'title' => $title,
+                'body' => $body,
+                'sound' => 'default',
+                'data' => $data
+            ]);
+    }
+}
