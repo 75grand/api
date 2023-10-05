@@ -16,12 +16,12 @@
             <x-animated-subtitle/>
         </div>
 
-        <x-ratings/>
-
         <div class="flex gap-4">
             <x-app-store-badge platform="ios"/>
             <x-app-store-badge platform="android"/>
         </div>
+
+        <x-ratings/>
 
         <div class="max-w-md w-full">
             <x-phone src="/assets/screenshots/home.png"/>
