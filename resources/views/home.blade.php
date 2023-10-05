@@ -16,6 +16,8 @@
             <x-animated-subtitle/>
         </div>
 
+        <x-ratings/>
+
         <div class="flex gap-4">
             <x-app-store-badge platform="ios"/>
             <x-app-store-badge platform="android"/>
