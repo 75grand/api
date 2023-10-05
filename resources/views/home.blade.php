@@ -21,7 +21,7 @@
             <x-app-store-badge platform="android"/>
         </div>
 
-        <x-ratings/>
+        {{-- <x-ratings/> --}}
 
         <div class="max-w-md w-full">
             <x-phone src="/assets/screenshots/home.png"/>
