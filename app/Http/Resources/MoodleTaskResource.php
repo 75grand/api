@@ -16,12 +16,10 @@ class MoodleTaskResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => Str::before($this->remote_id, '@'),
+            'id' => $request->user()->version >= '1.1.0' ? $this->id : Str::before($this->remote_id, '@'),
             'title' => $this->title,
             'due' => $this->due_date,
             'class' => $this->class,
-
-            // 'id' => $this->id,
             'description' => $this->description,
             'completed_at' => $this->completed_at
         ];

@@ -64,6 +64,8 @@ Route::get('authentication', [MobileAuthController::class, 'redirect']);
 // Moodle
 Route::middleware('auth:sanctum')->group(function() {
     Route::get('moodle', [MoodleController::class, 'index']);
+    Route::post('moodle/migrate', [MoodleController::class, 'migrate']);
+    Route::patch('moodle/{task}', [MoodleController::class, 'update']);
 });
 
 // User Accounts

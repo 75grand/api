@@ -28,16 +28,16 @@ class SendStaleListingNotifications implements ShouldQueue
             ->get();
 
         foreach($listings as $listing) {
+            if($listing->user->expo_token === null) continue;
+
             $trimmedTitle = Str::limit($listing->title, 25);
 
-            Http::withToken(env('EXPO_ACCESS_TOKEN'))
-                ->post('https://exp.host/--/api/v2/push/send', [
-                    'to' => $listing->user->expo_token,
-                    'title' => 'Is this still for sale?',
-                    'body' => "It’s been a second since you posted “{$trimmedTitle}”. If it’s not available, you can update the listing.",
-                    'sound' => 'default',
-                    'data' => ['url' => "grand://marketplace/$listing->id"]
-                ]);
+            send_expo_notification(
+                to: $listing->user->expo_token,
+                title: 'Is this still for sale?',
+                body: "It’s been a second since you posted “{$trimmedTitle}”. If it’s not available, you can update the listing.",
+                data: ['url' => "grand://marketplace/$listing->id"]
+            );
         }
     }
 }

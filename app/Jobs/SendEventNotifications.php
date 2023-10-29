@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Http;
 
 class SendEventNotifications implements ShouldQueue
 {
@@ -48,16 +47,12 @@ class SendEventNotifications implements ShouldQueue
                 $event->location ? " ({$event->location})" : ''
             );
 
-            // I decided not to use Laravel's notification system because it
-            // doesn't support sending multiple tokens per rquest to Expo
-            Http::withToken(env('EXPO_ACCESS_TOKEN'))
-                ->post('https://exp.host/--/api/v2/push/send', [
-                    'to' => $tokens,
-                    'title' => $event->title,
-                    'body' => $body,
-                    'sound' => 'default',
-                    'data' => ['url' => "grand://calendar/$event->id"]
-                ]);
+            send_expo_notification(
+                to: $tokens,
+                title: $event->title,
+                body: $body,
+                data: ['url' => "grand://calendar/$event->id"]
+            );
         });
     }
 }
