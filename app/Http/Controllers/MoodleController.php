@@ -54,6 +54,6 @@ class MoodleController extends Controller
         $request
             ->user()->tasks()
             ->whereIn('remote_id', $moodleIds)
-            ->update(['completed_at' => now()]);
+            ->update(['completed_at' => now()->subDays(8)]);
     }
 }
