@@ -37,12 +37,16 @@ class SendMoodleNotifications implements ShouldQueue
 
             send_expo_notification(
                 to: $task->user->expo_token,
-                title: "$task->class assignment due soon",
+                title: sprintf(
+                    'Assignment due %s',
+                    $task->due_date->isToday() ? 'today' : 'tomorrow'
+                ),
                 body: sprintf(
-                    '“%s” is due in %s on %s',
+                    '“%s” (%s) is due %s at %s',
                     Str::limit($task->title, 25),
-                    $task->due_date->shortAbsoluteDiffForHumans(parts: 2),
-                    $task->due_date->setTimezone('America/Chicago')->format('l \a\t g:i A')
+                    $task->class,
+                    $task->due_date->isToday() ? 'today' : 'tomorrow',
+                    $task->due_date->setTimezone('America/Chicago')->format('g:i A')
                 )
             );
         }
