@@ -61,10 +61,10 @@ class RefreshMoodleTasks implements ShouldQueue
                 $this->user->tasks()->updateOrCreate([
                     'remote_id' => $event->uid
                 ], [
-                    'title' => Str::replaceLast(' is due', '', $event->summary),
+                    'title' => deep_clean_string(Str::replaceLast(' is due', '', $event->summary)),
                     'due_date' => Carbon::parse($event->dtstart, $timeZone),
                     'class' => $this->formatClass($event->categories),
-                    'description' => $event->description
+                    'description' => deep_clean_string($event->description)
                 ]);
             }
     
