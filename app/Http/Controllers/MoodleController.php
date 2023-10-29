@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\MoodleTaskResource;
 use App\Models\MoodleTask;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MoodleController extends Controller
 {
@@ -54,6 +55,6 @@ class MoodleController extends Controller
         $request
             ->user()->tasks()
             ->whereIn('remote_id', $moodleIds)
-            ->update(['completed_at' => now()->subDays(8)]);
+            ->update(['completed_at' => DB::raw('due_date')]);
     }
 }
