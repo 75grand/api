@@ -21,7 +21,7 @@ class RefreshCalendars implements ShouldQueue
         'Career' => 'https://calendar.google.com/calendar/ical/uv4vv7rnmoulifk9989ftnoooigdq4ev%40import.calendar.google.com/public/basic.ics',
         'Lectures' => 'https://calendar.google.com/calendar/ical/rgcupookhah3fr2uq5lbemckof8upsfo%40import.calendar.google.com/public/basic.ics',
         'Dev Garden' => 'https://calendar.google.com/calendar/ical/macalester.edu_foee38ec77nqatr9hor7id17bk%40group.calendar.google.com/public/basic.ics',
-        // 'Program Board' => 'https://calendar.google.com/calendar/ical/macalester.edu_mapq50fqbvln58l7m4mkg1ch1k%40group.calendar.google.com/public/basic.ics',
+        'Program Board' => 'https://calendar.google.com/calendar/ical/macalester.edu_mapq50fqbvln58l7m4mkg1ch1k%40group.calendar.google.com/public/basic.ics',
         'Featured' => 'https://calendar.google.com/calendar/ical/1umva68vh7qjhvpm0ua1dje051h34q9c%40import.calendar.google.com/public/basic.ics',
     ];
 
