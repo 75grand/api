@@ -6,6 +6,7 @@ use App\Http\Resources\MoodleTaskResource;
 use App\Models\MoodleTask;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Query\Builder;
 
 class MoodleController extends Controller
 {
@@ -18,8 +19,11 @@ class MoodleController extends Controller
         abort_if($url === null, 400);
 
         $tasks = $request->user()->tasks()
-            ->whereNull('completed_at')
-            ->orWhere('completed_at', '>', now()->subWeek())
+            ->where(
+                fn(Builder $query) => $query
+                    ->whereNull('completed_at')
+                    ->orWhere('completed_at', '>', now()->subWeek())
+            )
             ->get();
 
         return MoodleTaskResource::collection($tasks);
