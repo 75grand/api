@@ -18,8 +18,8 @@ Route::get('/download', [DownloadController::class, 'automatic'])->name('downloa
 Route::get('/download/ios', [DownloadController::class, 'ios'])->name('download.ios');
 Route::get('/download/android', [DownloadController::class, 'android'])->name('download.android');
 
-Route::get('/marketplace/{listing}', [ListingController::class, 'page'])->name('listings.show');
-Route::get('/calendar/{event}', [CalendarEventController::class, 'page'])->name('events.show');
+Route::get('/marketplace/{listing}', [ListingController::class, 'page'])->name('listings.preview');
+Route::get('/calendar/{event}', [CalendarEventController::class, 'page'])->name('events.preview');
 
 Route::get('/auth/callback', [MobileAuthController::class, 'callback'])->name('auth.callback');
 

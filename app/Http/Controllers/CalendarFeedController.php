@@ -28,7 +28,7 @@ class CalendarFeedController extends Controller
         foreach($user->events as $event) {
             $iCalEvent = Event::create()
                 ->name($event->title)
-                ->url(route('event.show', $event->id))
+                ->url(route('events.preview', $event->id))
                 ->uniqueIdentifier($event->id)
                 ->period($event->start_date, $event->end_date);
 
