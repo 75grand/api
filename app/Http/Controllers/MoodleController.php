@@ -6,7 +6,7 @@ use App\Http\Resources\MoodleTaskResource;
 use App\Models\MoodleTask;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 
 class MoodleController extends Controller
 {
