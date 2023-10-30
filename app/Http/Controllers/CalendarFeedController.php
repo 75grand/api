@@ -19,11 +19,10 @@ class CalendarFeedController extends Controller
         $firstName = Str::before($user->name, ' ');
 
         $calendar = Calendar::create()
+            ->timezone(Timezone::create('America/Chicago'))
             ->name('75grand')
             ->description("$firstName's events saved from 75grand")
-            ->refreshInterval(15)
-            ->withoutAutoTimezoneComponents()
-            ->timezone(Timezone::create('America/Chicago'));
+            ->refreshInterval(15);
 
         foreach($user->events as $event) {
             $iCalEvent = Event::create()
