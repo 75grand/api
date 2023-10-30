@@ -28,6 +28,7 @@ class CalendarFeedController extends Controller
         foreach($user->events as $event) {
             $iCalEvent = Event::create()
                 ->name($event->title)
+                ->url(route('event.show', $event->id))
                 ->uniqueIdentifier($event->id)
                 ->period($event->start_date, $event->end_date);
 
@@ -35,7 +36,6 @@ class CalendarFeedController extends Controller
             if($event->latitude && $event->longitude) $iCalEvent->coordinates($event->latitude, $event->longitude);
             if($event->location) $iCalEvent->address($event->location);
             if($event->image_url) $iCalEvent->image($event->image_url);
-            if($event->url) $iCalEvent->url($event->url);
 
             $calendar->event($iCalEvent);
         }
