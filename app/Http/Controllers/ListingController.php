@@ -6,6 +6,7 @@ use App\Http\Resources\ListingResource;
 use App\Models\Listing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Builder;
 
 class ListingController extends Controller
 {
@@ -15,10 +16,23 @@ class ListingController extends Controller
     public function index(Request $request)
     {
         $listings = Listing::query()
-            ->where('available', true)
-            ->orWhereDate('updated_at', '>=', now()->subWeek())
+            ->where(
+                // Only show listings that are available or recently unavailable
+                fn(Builder $query) => $query
+                    ->where('available', true)
+                    ->orWhereDate('updated_at', '>=', now()->subWeek())
+            )
+            ->whereHas('user',
+                // If a user is shadow banned, hide their listings from everyone but themselves
+                fn(Builder $query) => $query
+                    ->where('marketplace_ban', false)
+                    ->orWhere('user_id', $request->user()->id)
+            )
+            // Put the unavailable listings at the bottom
             ->orderBy('available', 'desc')
+            // Put the most recently created listings at the top
             ->latest()
+            // Put the current user's listings at the very top
             ->orderByRaw('user_id = ?', $request->user()->id)
             ->with('user')
             ->get();
