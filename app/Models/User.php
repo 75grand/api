@@ -11,7 +11,15 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $hidden = ['expo_token', 'pivot'];
+    protected $hidden = [
+        'expo_token',
+        'pivot'
+    ];
+
+    protected $casts = [
+        'marketplace_ban' => 'boolean',
+        'moodle_user_id' => 'integer'
+    ];
 
     public function referrer()
     {
