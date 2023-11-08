@@ -1,6 +1,6 @@
 <x-page heading="Privacy Policy" title="Privacy Policy — 75grand">
 
-_Last updated: August 23, 2023._
+_Last updated: November 7, 2023._
 
 This privacy policy explains how we collect, use, and protect your personal information when you access and use our services.
 
@@ -22,6 +22,7 @@ Please review these services’ terms and conditions:
 - [Beam Analytics](https://beamanalytics.io/privacy) (on the website only)
 - [Expo](https://expo.dev/privacy)
 - [Sentry](https://sentry.io/privacy/)
+- [June](https://help.june.so/en/articles/6823521-privacy-policy)
 
 ## How We Use Your Information
 
