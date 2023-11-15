@@ -14,9 +14,8 @@ class CalendarEventController extends Controller
     public function index()
     {
         $events = CalendarEvent::query()
-            ->whereDate('end_date', '>=', now('America/Chicago'))
-            ->where('end_date', '!=', now('America/Chicago')->startOfDay())
-            ->whereRaw('TIMESTAMPDIFF(HOUR, start_date, end_date) <= 24')
+            ->where('start_date', '>=', now('America/Chicago')->startOfDay())
+            ->where('end_date', '<', now('America/Chicago')->endOfDay())
             ->orderBy('start_date')
             ->withCount('users')
             ->get();
