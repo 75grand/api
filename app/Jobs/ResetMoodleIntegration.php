@@ -19,7 +19,7 @@ class ResetMoodleIntegration implements ShouldQueue
      */
     public function handle(): void
     {
-        User::all()->update([
+        User::query()->update([
             'moodle_user_id' => null,
             'moodle_token' => null
         ]);
