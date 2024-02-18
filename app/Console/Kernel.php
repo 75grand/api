@@ -22,7 +22,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->job(new RefreshCalendars)->hourlyAt(30)->sentryMonitor('refresh-calendars');
-        $schedule->job(new RefreshCourseData)->dailyAt('5:00' /* 12:00 AM CST */)->sentryMonitor('refresh-course-data');
+        // $schedule->job(new RefreshCourseData)->dailyAt('5:00' /* 12:00 AM CST */)->sentryMonitor('refresh-course-data');
 
         $schedule->job(new SendEventNotifications)->everyMinute()->sentryMonitor('send-event-notifications');
         $schedule->job(new SendStaleListingNotifications)->dailyAt('23:00' /* 6:00 PM CST */)->sentryMonitor('send-stale-notifications');
