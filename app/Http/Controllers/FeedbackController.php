@@ -27,7 +27,7 @@ class FeedbackController extends Controller
                         $user = User::firstWhere('email', $data['email']);
                         $subject = '[75grand] Feedback from ' . ($user->name ?? 'User');
                         
-                        $message->to('jpaulos@macalester.edu');
+                        $message->to('jero@hey.com');
                         $message->subject($subject);
                         if($user) $message->replyTo($user->email);
                     }
