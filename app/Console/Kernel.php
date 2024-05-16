@@ -31,7 +31,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new SendMoodleNotifications)->dailyAt('13:30' /* 8:30 AM CST */);
 
         $schedule->job(new ResetMoodleIntegration)->yearlyOn(1 /* January 1st */);
-        $schedule->job(new ResetMoodleIntegration)->yearlyOn(6 /* June 1st */);
+        $schedule->job(new ResetMoodleIntegration)->yearlyOn(5, 15 /* May 15th */);
 
         // https://laravel.com/docs/10.x/telescope#data-pruning
         $schedule->command('telescope:prune')->daily();
