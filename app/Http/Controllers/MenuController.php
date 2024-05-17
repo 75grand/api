@@ -68,7 +68,10 @@ class MenuController extends Controller
     public function show(Request $request, int $id)
     {
         return cache()->rememberForever($request->path(), function() use ($id) {
-            $data = Http::get("https://legacy.cafebonappetit.com/api/2/items?item=$id");
+            $data = Http::withBasicAuth(env('BON_APPETIT_API_USERNAME'), env('BON_APPETIT_API_PASSWORD'))
+                ->get("https://cafemanager-api.cafebonappetit.com/api/2/items?item=$id")
+                ->json();
+
             $item = $data['items'][$id];
 
             $nutrition = [];
