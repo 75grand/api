@@ -24,7 +24,10 @@ class MenuController extends Controller
 
         return cache()->remember($request->path(), now()->addHour(), function() use ($date) {
             $cafeId = 159;
-            $data = Http::get("https://legacy.cafebonappetit.com/api/1/cafe/$cafeId/date/$date")->json();
+
+            $data = Http::withBasicAuth(env('BON_APPETIT_API_USERNAME'), env('BON_APPETIT_API_PASSWORD'))
+                ->get("https://cafemanager-api.cafebonappetit.com/api/1/cafe/$cafeId/date/$date")
+                ->json();
 
             if(empty($data['cafe']['menu'][0]['days'])) return false;
             $days = $data['cafe']['menu'][0]['days'];
