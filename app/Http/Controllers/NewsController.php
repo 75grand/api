@@ -34,9 +34,9 @@ class NewsController extends Controller
             return match($source) {
                 NewsSource::MACALESTER => self::formatWordPressArticles($articles),
                 NewsSource::THE_MAC_WEEKLY => self::formatWordPressArticles($articles),
-                NewsSource::THE_HEGEMONOCLE => self::formatHegeArticles($articles),
+                NewsSource::THE_HEGEMONOCLE => Collection::empty(),
                 NewsSource::SUMMIT => self::formatSummitArticles($articles),
-                NewsSource::REDDIT => self::formatRedditPosts($articles)
+                NewsSource::REDDIT => Collection::empty()
             };
         });
     }
