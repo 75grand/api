@@ -11,6 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class RefreshSportsCalendar implements ShouldQueue
 {
@@ -21,8 +22,20 @@ class RefreshSportsCalendar implements ShouldQueue
      */
     public function handle(): void
     {
-        $feed = Http::get('https://athletics.macalester.edu/calendar.ashx/calendar.rss');
-        $feed = simplexml_load_string($feed);
+        $response = Http::get('https://athletics.macalester.edu/calendar.ashx/calendar.rss')->body();
+        $trimmedResponse = trim($response);
+
+        try {
+            $feed = simplexml_load_string($trimmedResponse);
+        } catch (\Exception $e) {
+            Log::error('Error parsing sports calendar XML: ' . $e->getMessage());
+            return;
+        }
+
+        if ($feed === false) {
+            Log::error('Failed to parse sports calendar XML');
+            return;
+        }
 
         foreach($feed->channel->item as $item) {
             $ev = $item->children('ev', true); // Event information
