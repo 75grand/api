@@ -22,8 +22,11 @@ class RefreshPresenceCalendar implements ShouldQueue
     public function handle(): void
     {
         $info = Http::get('https://api.presence.io/macalester/v1/app/campus')->json();
+        if($info === null) return;
+
         $events = Http::get('https://api.presence.io/macalester/v1/events')->json();
-        
+        if($events === null) return;
+
         foreach($events as $event) {
             if($event['hasCoverImage']) {
                 $imageUrl = sprintf(
