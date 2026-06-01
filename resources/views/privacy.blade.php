@@ -19,7 +19,7 @@ To provide our services, we may rely on third-party services and platforms, incl
 Please review these services’ terms and conditions:
 
 - [Google Play Services](https://policies.google.com/privacy) (on Android only)
-- [OneDollarStats](https://onedollarstats.com) (on the website only)
+- [OneDollarStats](https://onedollarstats.com/privacy) (on the website only)
 - [Expo](https://expo.dev/privacy)
 - [Sentry](https://sentry.io/privacy/)
 - [June](https://help.june.so/en/articles/6823521-privacy-policy)
